@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School TV | Live Stream</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #2c3e50;
+            --bg-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #357abd;
+            --border-color: #e1e8ed;
+            --chat-bg: rgba(255, 255, 255, 0.8);
+            --message-bg: rgba(74, 144, 226, 0.1);
+            --live-indicator: #ff4757;
+            --interaction-bg: rgba(0, 0, 0, 0.6);
+            --player-gradient: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            --card-hover-bg: rgba(255, 255, 255, 0.98);
+            --tab-active-bg: #4a90e2;
+            --tab-active-color: #ffffff;
+            --notification-bg: #ff4757;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --secondary-color: #1a2634;
+            --text-color: #e1e8ed;
+            --bg-color: #0f172a;
+            --card-bg: rgba(26, 38, 52, 0.95);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --hover-color: #5a9de2;
+            --border-color: #2a3f52;
+            --chat-bg: rgba(26, 38, 52, 0.8);
+            --message-bg: rgba(74, 144, 226, 0.2);
+            --interaction-bg: rgba(0, 0, 0, 0.8);
+            --card-hover-bg: rgba(26, 38, 52, 0.98);
+            --glass-bg: rgba(0, 0, 0, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 5%;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .stream-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .stream-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow-color);
+        }
+
+        .video-container {
+            position: relative;
+            padding-top: 56.25%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: var(--player-gradient);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .control-button {
+            background: var(--interaction-bg);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .control-button:hover {
+            background: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            width: 50%;
+            transition: width 0.2s ease;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .progress-bar:hover .progress::after {
+            display: block;
+        }
+
+        .stream-info {
+            padding: 1.5rem;
+        }
+
+        .stream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stream-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .live-badge {
+            background: var(--live-indicator);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: ripple 1.5s infinite;
+        }
+
+        .stream-meta {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .stream-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stream-description {
+            padding: 1rem;
+            background: var(--secondary-color);
+            border-radius: 10px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stream-description:hover {
+            transform: translateX(5px);
+            background: var(--card-hover-bg);
+        }
+
+        .stream-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .primary-action {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .secondary-action {
+            background: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .content-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .content-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .content-tab.active {
+            color: var(--primary-color);
+        }
+
+        .content-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+            animation: slideIn 0.3s ease;
+        }
+
+        .suggested-content {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .content-card {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card:hover {
+            transform: translateX(5px);
+            background: var(--card-hover-bg);
+        }
+
+        .content-thumbnail {
+            width: 180px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover .content-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .content-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        .content-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .live-indicator {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: var(--live-indicator);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        .duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .chat-section {
+            background: var(--chat-bg);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 120px);
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+        }
+
+        .chat-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .chat-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-option {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+
+        .chat-option:hover {
+            opacity: 1;
+            background: var(--glass-bg);
+            transform: scale(1.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            padding: 0.8rem;
+            background: var(--message-bg);
+            border-radius: 10px;
+            animation: fadeIn 0.3s ease;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .message:hover {
+            transform: translateX(5px);
+            background: var(--glass-bg);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .username {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-badge {
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .message-time {
+            opacity: 0.7;
+        }
+
+        .message-content {
+            line-height: 1.4;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--glass-bg);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .send-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .send-button:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .emoji-picker {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+            padding: 1rem;
+            display: none;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+        }
+
+        .emoji-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .emoji-item:hover {
+            background: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-section {
+                height: 500px;
+                position: static;
+            }
+
+            .content-thumbnail {
+                width: 120px;
+                height: 68px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .stream-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stream-meta {
+                flex-wrap: wrap;
+            }
+
+            .stream-actions {
+                flex-direction: column;
+            }
+
+            .content-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 1rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--hover-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">
+            <i class="fas fa-tv"></i>
+            SchoolTV
+        </a>
+        <nav class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Trang Chủ</a>
+            <a href="#"><i class="fas fa-compass"></i> Khám Phá</a>
+            <a href="#"><i class="fas fa-university"></i> Trường Học</a>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="#" class="user-profile">
+                <img src="https://picsum.photos/32/32" alt="User Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
+            </a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="content-section">
+            <section class="stream-section">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/live_stream?channel=CHANNEL_ID" allowfullscreen></iframe>
+                    <div class="video-controls">
+                        <button class="control-button">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                        <button class="control-button">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button class="control-button">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="control-button">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="stream-info">
+                    <div class="stream-header">
+                        <h1 class="stream-title">Lễ Tốt Nghiệp 2023 - ĐH Bách Khoa Hà Nội</h1>
+                        <div class="live-badge">LIVE</div>
+                    </div>
+                    <div class="stream-meta">
+                        <span><i class="fas fa-users"></i> 1,234 người xem</span>
+                        <span><i class="fas fa-clock"></i> Bắt đầu 2 giờ trước</span>
+                        <span><i class="fas fa-university"></i> ĐH Bách Khoa Hà Nội</span>
+                        <span><i class="fas fa-heart"></i> 2.5K lượt thích</span>
+                    </div>
+                    <div class="stream-actions">
+                        <button class="action-button primary-action">
+                            <i class="fas fa-heart"></i> Thích
+                        </button>
+                        <button class="action-button secondary-action">
+                            <i class="fas fa-share"></i> Chia sẻ
+                        </button>
+                        <button class="action-button secondary-action">
+                            <i class="fas fa-bell"></i> Theo dõi
+                        </button>
+                    </div>
+                    <div class="stream-description">
+                        <p>Buổi lễ tốt nghiệp trang trọng dành cho các tân kỹ sư, cử nhân Đại học Bách Khoa Hà Nội. 
+                           Chương trình bao gồm các phần:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Phát biểu của Ban Giám hiệu</li>
+                            <li>Trao bằng tốt nghiệp</li>
+                            <li>Vinh danh sinh viên xuất sắc</li>
+                            <li>Các tiết mục văn nghệ đặc sắc</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="suggested-content">
+                <div class="content-tabs">
+                    <button class="content-tab active" data-tab="live">Đang Live</button>
+                    <button class="content-tab" data-tab="videos">Video Gợi Ý</button>
+                    <button class="content-tab" data-tab="posts">Bài Viết</button>
+                </div>
+
+                <div class="tab-content active" id="live-content">
+                    <div class="content-card" data-aos="fade-up">
+                        <div class="content-thumbnail">
+                            <img src="https://picsum.photos/200/120?random=1" alt="Live thumbnail">
+                            <div class="live-indicator">
+                                <span class="pulse"></span>
+                                LIVE
+                            </div>
+                        </div>
+                        <div class="content-info">
+                            <h3 class="content-title">Hội thảo: Công nghệ AI trong Giáo dục</h3>
+                            <div class="content-meta">
+                                <span>ĐH FPT</span>
+                                <span><i class="fas fa-users"></i> 856 người xem</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="content-thumbnail">
+                            <img src="https://picsum.photos/200/120?random=2" alt="Live thumbnail">
+                            <div class="live-indicator">
+                                <span class="pulse"></span>
+                                LIVE
+                            </div>
+                        </div>
+                        <div class="content-info">
+                            <h3 class="content-title">Workshop: Digital Marketing Trends 2024</h3>
+                            <div class="content-meta">
+                                <span>ĐH Ngoại thương</span>
+                                <span><i class="fas fa-users"></i> 445 người xem</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="videos-content">
+                    <div class="content-card" data-aos="fade-up">
+                        <div class="content-thumbnail">
+                            <img src="https://picsum.photos/200/120?random=3" alt="Video thumbnail">
+                            <span class="duration">15:24</span>
+                        </div>
+                        <div class="content-info">
+                            <h3 class="content-title">Top 10 Lý Do Chọn ĐH Bách Khoa</h3>
+                            <div class="content-meta">
+                                <span>ĐH Bách Khoa Hà Nội</span>
+                                <span><i class="fas fa-eye"></i> 12K lượt xem</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="content-thumbnail">
+                            <img src="https://picsum.photos/200/120?random=4" alt="Video thumbnail">
+                            <span class="duration">22:15</span>
+                        </div>
+                        <div class="content-info">
+                            <h3 class="content-title">Một Ngày Của Sinh Viên Y Khoa</h3>
+                            <div class="content-meta">
+                                <span>ĐH Y Hà Nội</span>
+                                <span><i class="fas fa-eye"></i> 8.5K lượt xem</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="posts-content">
+                    <div class="content-card" data-aos="fade-up">
+                        <div class="content-info">
+                            <h3 class="content-title">🎉 Chúc mừng đội tuyển sinh viên FTU đã đạt giải Nhất cuộc thi "Marketing Challenge 2023"!</h3>
+                            <div class="content-meta">
+                                <span>ĐH Ngoại thương</span>
+                                <span><i class="far fa-clock"></i> 2 giờ trước</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="content-info">
+                            <h3 class="content-title">📢 Thông báo tuyển sinh năm học 2024-2025</h3>
+                            <!-- Previous code remains the same until the last closing div -->
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <aside class="chat-section">
+            <div class="chat-header">
+                <h2 class="chat-title">
+                    <i class="fas fa-comments"></i>
+                    Trò chuyện trực tiếp
+                </h2>
+                <div class="chat-options">
+                    <button class="chat-option" title="Cài đặt chat">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="chat-option" title="Mở rộng">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div class="chat-input">
+                <div class="input-container">
+                    <input type="text" placeholder="Nhập tin nhắn..." id="message-input">
+                    <button class="emoji-trigger chat-option">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <div class="emoji-picker">
+                        <div class="emoji-grid">
+                            <!-- Emojis will be dynamically added here -->
+                        </div>
+                    </div>
+                    <button class="send-button" id="send-message">
+                        <i class="fas fa-paper-plane"></i>
+                        Gửi
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: true
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.setAttribute('data-theme', 
+                body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+            themeToggle.innerHTML = body.getAttribute('data-theme') === 'dark' 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+        });
+
+        // Tab Switching
+        const tabs = document.querySelectorAll('.content-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+            });
+        });
+
+        // Chat Functionality
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-message');
+        
+        const mockUsers = [
+            { name: 'Minh Anh', badge: 'Mod' },
+            { name: 'Hoàng Long', badge: 'VIP' },
+            { name: 'Thu Hà', badge: null },
+            { name: 'Đức Nam', badge: 'Admin' }
+        ];
+
+        function createMessage(text, user) {
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerHTML = `
+                <div class="message-header">
+                    <span class="username">
+                        ${user.name}
+                        ${user.badge ? `<span class="user-badge">${user.badge}</span>` : ''}
+                    </span>
+                    <span class="message-time">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${text}</div>
+            `;
+            return message;
+        }
+
+        // Add some initial messages
+        const initialMessages = [
+            'Chúc mừng các tân cử nhân! 🎓',
+            'Buổi lễ thật trang trọng và ý nghĩa 👏',
+            'Chúc các bạn thành công trên con đường sắp tới 🌟',
+            'Cảm động quá! 😊'
+        ];
+
+        initialMessages.forEach((text, index) => {
+            setTimeout(() => {
+                const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+                const message = createMessage(text, randomUser);
+                chatMessages.appendChild(message);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, index * 1000);
+        });
+
+        // Send message functionality
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text) {
+                const message = createMessage(text, { name: 'Bạn', badge: null });
+                chatMessages.appendChild(message);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                messageInput.value = '';
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Video player controls animation
+        const videoContainer = document.querySelector('.video-container');
+        const videoControls = document.querySelector('.video-controls');
+
+        let controlsTimeout;
+
+        videoContainer.addEventListener('mousemove', () => {
+            videoControls.style.opacity = '1';
+            clearTimeout(controlsTimeout);
+            controlsTimeout = setTimeout(() => {
+                videoControls.style.opacity = '0';
+            }, 3000);
+        });
+
+        // Emoji picker functionality
+        const emojiTrigger = document.querySelector('.emoji-trigger');
+        const emojiPicker = document.querySelector('.emoji-picker');
+        const emojiGrid = document.querySelector('.emoji-grid');
+
+        const emojis = ['😊', '👋', '❤️', '👏', '🎓', '🌟', '💪', '🎉', '🙌', '✨'];
+
+        emojis.forEach(emoji => {
+            const emojiItem = document.createElement('div');
+            emojiItem.className = 'emoji-item';
+            emojiItem.textContent = emoji;
+            emojiItem.addEventListener('click', () => {
+                messageInput.value += emoji;
+                emojiPicker.style.display = 'none';
+            });
+            emojiGrid.appendChild(emojiItem);
+        });
+
+        emojiTrigger.addEventListener('click', () => {
+            emojiPicker.style.display = 
+                emojiPicker.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!emojiPicker.contains(e.target) && !emojiTrigger.contains(e.target)) {
+                emojiPicker.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
