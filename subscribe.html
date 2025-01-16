@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trường Học | School TV Show</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        /* Base styles - keeping existing styles */
+
+        /* [Previous base styles remain exactly the same until the header styles] */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f0f4f8;
+            --text-color: #2c3e50;
+            --bg-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #357abd;
+            --border-color: #e1e8ed;
+            --search-bg: #f5f8fa;
+            --gradient-1: linear-gradient(135deg, #4a90e2, #357abd);
+            --gradient-2: linear-gradient(135deg, #6ab0ff, #4a90e2);
+            --live-color: #ff4757;
+            --tab-active-bg: #4a90e2;
+            --tab-inactive-bg: #e1e8ed;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --secondary-color: #1a2634;
+            --text-color: #e1e8ed;
+            --bg-color: #0f172a;
+            --card-bg: rgba(26, 38, 52, 0.95);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --hover-color: #5a9de2;
+            --border-color: #2a3f52;
+            --search-bg: #1a2634;
+            --tab-inactive-bg: #1a2634;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* New Avatar Styles */
+
+        .user-avatar {
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-img:hover {
+            transform: scale(1.1);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            width: 280px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+            padding: 1rem;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-avatar:hover .user-dropdown {
+            display: block;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .user-details h4 {
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-details p {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--secondary-color);
+        }
+
+        /* [Rest of the previous CSS styles remain exactly the same] */
+
+        /* Header Styles */
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 5%;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile:hover img {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Search Section */
+
+        .schools-container {
+            padding-top: 80px;
+        }
+
+        .search-section {
+            background: var(--gradient-1);
+            padding: 3rem 5%;
+            border-radius: 20px;
+            margin: 2rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            background: var(--search-bg);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        /* Tabs */
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 5%;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: var(--tab-inactive-bg);
+            color: var(--text-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .tab.active {
+            color: white;
+        }
+
+        .tab.active::before {
+            opacity: 1;
+        }
+
+        .tab span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* School Cards */
+
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 5%;
+        }
+
+        .school-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .school-card:hover::before {
+            opacity: 1;
+        }
+
+        .school-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .school-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .school-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--live-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .subscribe-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: var(--gradient-1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .subscribe-btn.subscribed {
+            background: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            background: var(--gradient-2);
+        }
+
+        /* Section Headers */
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 5% 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .section-counter {
+            background: var(--card-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-counter i {
+            color: var(--primary-color);
+        }
+
+        /* Empty State */
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-color);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        /* Load More Button */
+
+        .load-more {
+            margin: 3rem auto;
+            padding: 1rem 3rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .load-more:hover {
+            transform: translateY(-2px);
+            background: var(--gradient-2);
+        }
+
+        .load-more i {
+            transition: transform 0.3s ease;
+        }
+
+        .load-more:hover i {
+            transform: translateY(2px);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .schools-grid {
+                grid-template-columns: 1fr;
+                margin: 2rem;
+            }
+
+            .search-section,
+            .tabs,
+            .section-header {
+                margin: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="logo">
+            <i class="fas fa-tv"></i>
+            SchoolTV
+        </a>
+        <nav class="nav-links">
+            <a href="#"><i class="fas fa-home"></i> Trang Chủ</a>
+            <a href="#"><i class="fas fa-compass"></i> Khám Phá</a>
+            <a href="#"><i class="fas fa-university"></i> Trường Học</a>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="#" class="user-profile">
+                <img src="https://picsum.photos/32/32" alt="User Avatar"
+                    style="width: 32px; height: 32px; border-radius: 50%;">
+            </a>
+        </nav>
+    </header>
+
+    <!-- [Rest of the HTML structure remains exactly the same until the script tag] -->
+    <div class="schools-container">
+        <div class="search-section" data-aos="fade-up">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Tìm kiếm trường học...">
+            </div>
+        </div>
+
+        <div class="tabs" data-aos="fade-up">
+            <div class="tab active" data-tab="explore">
+                <span><i class="fas fa-compass"></i> Khám Phá</span>
+            </div>
+            <div class="tab" data-tab="subscribed">
+                <span><i class="fas fa-star"></i> Đã Đăng Ký</span>
+            </div>
+        </div>
+
+        <div id="explore-section" data-aos="fade-up">
+            <div class="section-header">
+                <h2 class="section-title">Khám Phá Trường Học</h2>
+                <div class="section-counter">
+                    <i class="fas fa-school"></i>
+                    <span id="explore-count">0 trường</span>
+                </div>
+            </div>
+            <div class="schools-grid">
+                <!-- School cards will be dynamically added here -->
+            </div>
+            <button class="load-more" id="load-more-explore">
+                Xem Thêm <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+
+        <div id="subscribed-section" style="display: none;" data-aos="fade-up">
+            <div class="section-header">
+                <h2 class="section-title">Trường Đã Đăng Ký</h2>
+                <div class="section-counter">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="subscribed-count">0 trường</span>
+                </div>
+            </div>
+            <div class="schools-grid">
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <h3>Chưa có trường đã đăng ký</h3>
+                    <p>Hãy khám phá và đăng ký các trường bạn quan tâm</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Modified universities data with subscribed status
+        const universities = [{
+            name: "Đại học Bách Khoa Hà Nội",
+            followers: "50K+",
+            videos: "200+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Quốc Gia Hà Nội",
+            followers: "45K+",
+            videos: "180+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Kinh tế Quốc dân",
+            followers: "40K+",
+            videos: "150+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Y Hà Nội",
+            followers: "38K+",
+            videos: "120+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Học viện Ngoại giao",
+            followers: "35K+",
+            videos: "100+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Ngoại thương",
+            followers: "33K+",
+            videos: "90+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Xây dựng Hà Nội",
+            followers: "30K+",
+            videos: "85+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Thương mại",
+            followers: "28K+",
+            videos: "80+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Học viện Ngân hàng",
+            followers: "25K+",
+            videos: "75+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Luật Hà Nội",
+            followers: "23K+",
+            videos: "70+",
+            isLive: false,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Bách Khoa TP.HCM",
+            followers: "48K+",
+            videos: "210+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Sư phạm Hà Nội",
+            followers: "42K+",
+            videos: "160+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Hà Nội",
+            followers: "39K+",
+            videos: "140+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Đà Nẵng",
+            followers: "36K+",
+            videos: "110+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Cần Thơ",
+            followers: "33K+",
+            videos: "95+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Học viện Hành chính Quốc gia",
+            followers: "31K+",
+            videos: "85+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học FPT",
+            followers: "30K+",
+            videos: "100+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Bảo Lộc",
+            followers: "28K+",
+            videos: "75+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Phan Thiết",
+            followers: "27K+",
+            videos: "70+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Mở TP.HCM",
+            followers: "25K+",
+            videos: "65+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Tôn Đức Thắng",
+            followers: "24K+",
+            videos: "80+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Nha Trang",
+            followers: "23K+",
+            videos: "95+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Hùng Vương",
+            followers: "22K+",
+            videos: "90+",
+            isLive: false,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Kinh tế TP.HCM",
+            followers: "20K+",
+            videos: "85+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Học viện An ninh Nhân dân",
+            followers: "19K+",
+            videos: "75+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Kiến trúc Hà Nội",
+            followers: "18K+",
+            videos: "65+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Thái Nguyên",
+            followers: "17K+",
+            videos: "60+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Sài Gòn",
+            followers: "16K+",
+            videos: "55+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Quốc tế Hồng Bàng",
+            followers: "15K+",
+            videos: "50+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Thủy lợi",
+            followers: "14K+",
+            videos: "45+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Kinh tế Quốc dân Hà Nội",
+            followers: "13K+",
+            videos: "40+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Phòng cháy chữa cháy",
+            followers: "12K+",
+            videos: "35+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Tài chính - Marketing",
+            followers: "11K+",
+            videos: "30+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Bưu chính Viễn thông",
+            followers: "10K+",
+            videos: "25+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Công nghiệp TP.HCM",
+            followers: "9K+",
+            videos: "20+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Công nghệ TP.HCM",
+            followers: "8K+",
+            videos: "15+",
+            isLive: true,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Văn hóa Hà Nội",
+            followers: "7K+",
+            videos: "10+",
+            isLive: false,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Y Dược TP.HCM",
+            followers: "6K+",
+            videos: "5+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Kỹ thuật Y Dược Đà Nẵng",
+            followers: "5K+",
+            videos: "3+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Học viện Tòa án",
+            followers: "4K+",
+            videos: "2+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Học viện Tài chính",
+            followers: "3K+",
+            videos: "1+",
+            isLive: false,
+            isSubscribed: true
+        },
+        {
+            name: "Đại học Bạc Liêu",
+            followers: "2K+",
+            videos: "5+",
+            isLive: true,
+            isSubscribed: false
+        },
+        {
+            name: "Đại học Hòa Bình",
+            followers: "1K+",
+            videos: "3+",
+            isLive: false,
+            isSubscribed: true
+        }
+        ];
+
+        // Modified initialization code
+        const exploreGrid = document.querySelector('#explore-section .schools-grid');
+        const subscribedGrid = document.querySelector('#subscribed-section .schools-grid');
+
+        // Clear existing content
+        exploreGrid.innerHTML = '';
+        subscribedGrid.innerHTML = '';
+
+        // Load initial universities
+        universities.forEach(uni => {
+            exploreGrid.innerHTML += createSchoolCard(uni, uni.isSubscribed);
+            if (uni.isSubscribed) {
+                subscribedGrid.innerHTML += createSchoolCard(uni, true);
+            }
+        });
+
+        // [Rest of the JavaScript code remains the same, with updated subscribe button click handler]
+
+        // Modified subscribe button click handler
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('subscribe-btn')) {
+                const card = e.target.closest('.school-card');
+                const university = {
+                    name: card.querySelector('h3').textContent,
+                    followers: card.querySelector('.school-stats').textContent.match(/\d+K\+/)[0],
+                    videos: card.querySelector('.school-stats').textContent.match(/\d+\+/)[0],
+                    isLive: card.querySelector('.live-badge') !== null
+                };
+
+                // Update all instances of this university's subscribe button
+                const allCards = document.querySelectorAll('.school-card');
+                allCards.forEach(c => {
+                    if (c.querySelector('h3').textContent === university.name) {
+                        const btn = c.querySelector('.subscribe-btn');
+                        btn.classList.toggle('subscribed');
+                        btn.textContent = btn.classList.contains('subscribed') ? 'Đã đăng ký' : 'Đăng ký';
+                    }
+                });
+
+                // Update subscribed section
+                if (e.target.classList.contains('subscribed')) {
+                    if (subscribedGrid.querySelector('.empty-state')) {
+                        subscribedGrid.innerHTML = '';
+                    }
+                    subscribedGrid.innerHTML += createSchoolCard(university, true);
+                } else {
+                    const subscribedCard = Array.from(subscribedGrid.children)
+                        .find(c => c.querySelector('h3').textContent === university.name);
+                    if (subscribedCard) subscribedCard.remove();
+
+                    if (subscribedGrid.children.length === 0) {
+                        subscribedGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-star"></i>
+                                <h3>Chưa có trường đã đăng ký</h3>
+                                <p>Hãy khám phá và đăng ký các trường bạn quan tâm</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                updateCounters();
+            }
+        });
+
+        // Update counters
+        function updateCounters() {
+            document.getElementById('explore-count').textContent =
+                `${document.querySelectorAll('#explore-section .school-card').length} trường`;
+            document.getElementById('subscribed-count').textContent =
+                `${document.querySelectorAll('#subscribed-section .school-card:not(.empty-state)').length} trường`;
+        }
+
+        updateCounters();
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function toggleTheme() {
+            document.documentElement.setAttribute('data-theme',
+                document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+
+            themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ?
+                '<i class="fas fa-sun"></i>' :
+                '<i class="fas fa-moon"></i>';
+        }
+
+        if (prefersDarkScheme.matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Tab Switching
+        const tabs = document.querySelectorAll('.tab');
+        const exploreSection = document.getElementById('explore-section');
+        const subscribedSection = document.getElementById('subscribed-section');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                if (tab.dataset.tab === 'explore') {
+                    exploreSection.style.display = 'block';
+                    subscribedSection.style.display = 'none';
+                } else {
+                    exploreSection.style.display = 'none';
+                    subscribedSection.style.display = 'block';
+                }
+            });
+        });
+
+        // Add this function before any other JavaScript code
+        function createSchoolCard(university, isSubscribed = false) {
+            return `
+        <div class="school-card" data-aos="fade-up">
+            ${university.isLive ? `
+                <div class="live-badge">
+                    <span>LIVE</span>
+                </div>
+            ` : ''}
+            <div class="school-logo">
+                <i class="fas fa-university"></i>
+            </div>
+            <div class="school-info">
+                <h3>${university.name}</h3>
+                <div class="school-stats">
+                    <span><i class="fas fa-users"></i> ${university.followers}</span>
+                    <span><i class="fas fa-video"></i> ${university.videos}</span>
+                </div>
+            </div>
+            <button class="subscribe-btn ${isSubscribed ? 'subscribed' : ''}">
+                ${isSubscribed ? 'Đã đăng ký' : 'Đăng ký'}
+            </button>
+        </div>
+    `;
+        }
+
+        // Search Functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.school-card');
+
+            cards.forEach(card => {
+                const schoolName = card.querySelector('h3').textContent.toLowerCase();
+                if (card.closest('#explore-section')) {
+                    card.style.display = schoolName.includes(searchTerm) ? 'flex' : 'none';
+                }
+            });
+        });
+
+        // Replace the existing load more code with this
+        let currentIndex = 10; // Start from 10 since we're showing first 10 initially
+        const loadMoreBtn = document.getElementById('load-more-explore');
+
+        loadMoreBtn.addEventListener('click', () => {
+            const nextUniversities = universities.slice(currentIndex, currentIndex + 10);
+            if (nextUniversities.length > 0) {
+                nextUniversities.forEach(uni => {
+                    exploreGrid.innerHTML += createSchoolCard(uni, uni.isSubscribed);
+                });
+                currentIndex += 10;
+
+                if (currentIndex >= universities.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+
+            updateCounters();
+            AOS.refresh();
+        });
+        // [Rest of the JavaScript code remains exactly the same]
+    </script>
+</body>
+
+</html>
