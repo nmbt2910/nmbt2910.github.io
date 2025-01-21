@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,7 @@
             --message-bg: rgba(74, 144, 226, 0.1);
             --live-indicator: #ff4757;
             --interaction-bg: rgba(0, 0, 0, 0.6);
-            --player-gradient: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            --player-gradient: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
             --card-hover-bg: rgba(255, 255, 255, 0.98);
             --tab-active-bg: #4a90e2;
             --tab-active-color: #ffffff;
@@ -59,24 +60,51 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         @keyframes ripple {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
 
         body {
@@ -255,6 +283,53 @@
 
         .progress-bar:hover .progress::after {
             display: block;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, var(--primary-color) 100%, rgba(255, 255, 255, 0.3) 100%);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .volume-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .volume-control:hover .volume-slider {
+            width: 100px;
         }
 
         .stream-info {
@@ -682,12 +757,10 @@
             .main-container {
                 grid-template-columns: 1fr;
             }
-
             .chat-section {
                 height: 500px;
                 position: static;
             }
-
             .content-thumbnail {
                 width: 120px;
                 height: 68px;
@@ -698,20 +771,16 @@
             .nav-links {
                 display: none;
             }
-
             .stream-header {
                 flex-direction: column;
                 gap: 1rem;
             }
-
             .stream-meta {
                 flex-wrap: wrap;
             }
-
             .stream-actions {
                 flex-direction: column;
             }
-
             .content-tabs {
                 overflow-x: auto;
                 white-space: nowrap;
@@ -737,6 +806,7 @@
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <a href="#" class="logo">
@@ -760,30 +830,26 @@
         <div class="content-section">
             <section class="stream-section">
                 <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/4G65us6CFqw?si=tE0K47oVRiIP5VuY&autoplay=1&controls=0" 
-                            frameborder="0" 
-                            allowfullscreen
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        ></iframe>
+                    <iframe id="youtube-player" src="https://www.youtube.com/embed/4G65us6CFqw?si=tE0K47oVRiIP5VuY&enablejsapi=1&autoplay=1&controls=0" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
                     <div class="video-controls">
-                        <button class="control-button">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="progress-bar">
-                            <div class="progress"></div>
+                        <button class="control-button" id="play-pause">
+            <i class="fas fa-pause"></i>
+        </button>
+                        <div class="progress-bar" id="progress-bar">
+                            <div class="progress" id="progress"></div>
                         </div>
-                        <button class="control-button">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <button class="control-button">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <button class="control-button">
-                            <i class="fas fa-expand"></i>
-                        </button>
+                        <div class="volume-control">
+                            <button class="control-button" id="mute-toggle">
+                <i class="fas fa-volume-up"></i>
+            </button>
+                            <input type="range" id="volume-slider" min="0" max="100" value="100" class="volume-slider">
+                        </div>
+                        <button class="control-button" id="fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
                     </div>
                 </div>
+
                 <div class="stream-info">
                     <div class="stream-header">
                         <h1 class="stream-title">Lễ Tốt Nghiệp 2023 - ĐH Bách Khoa Hà Nội</h1>
@@ -807,8 +873,7 @@
                         </button>
                     </div>
                     <div class="stream-description">
-                        <p>Buổi lễ tốt nghiệp trang trọng dành cho các tân kỹ sư, cử nhân Đại học Bách Khoa Hà Nội. 
-                           Chương trình bao gồm các phần:</p>
+                        <p>Buổi lễ tốt nghiệp trang trọng dành cho các tân kỹ sư, cử nhân Đại học Bách Khoa Hà Nội. Chương trình bao gồm các phần:</p>
                         <ul style="margin-left: 20px; margin-top: 10px;">
                             <li>Phát biểu của Ban Giám hiệu</li>
                             <li>Trao bằng tốt nghiệp</li>
@@ -831,8 +896,7 @@
                         <div class="content-thumbnail">
                             <img src="https://picsum.photos/200/120?random=1" alt="Live thumbnail">
                             <div class="live-indicator">
-                                <span class="pulse"></span>
-                                LIVE
+                                <span class="pulse"></span> LIVE
                             </div>
                         </div>
                         <div class="content-info">
@@ -848,8 +912,7 @@
                         <div class="content-thumbnail">
                             <img src="https://picsum.photos/200/120?random=2" alt="Live thumbnail">
                             <div class="live-indicator">
-                                <span class="pulse"></span>
-                                LIVE
+                                <span class="pulse"></span> LIVE
                             </div>
                         </div>
                         <div class="content-info">
@@ -908,100 +971,265 @@
                             <h3 class="content-title">📢 Thông báo tuyển sinh năm học 2024-2025</h3>
                             <!-- Previous code remains the same until the last closing div -->
 
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <aside class="chat-section">
-            <div class="chat-header">
-                <h2 class="chat-title">
-                    <i class="fas fa-comments"></i>
-                    Trò chuyện trực tiếp
-                </h2>
-                <div class="chat-options">
-                    <button class="chat-option" title="Cài đặt chat">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                    <button class="chat-option" title="Mở rộng">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <!-- Messages will be dynamically added here -->
-            </div>
-            <div class="chat-input">
-                <div class="input-container">
-                    <input type="text" placeholder="Nhập tin nhắn..." id="message-input">
-                    <button class="emoji-trigger chat-option">
-                        <i class="far fa-smile"></i>
-                    </button>
-                    <div class="emoji-picker">
-                        <div class="emoji-grid">
-                            <!-- Emojis will be dynamically added here -->
                         </div>
                     </div>
-                    <button class="send-button" id="send-message">
+            </section>
+            </div>
+
+
+            <aside class="chat-section">
+                <div class="chat-header">
+                    <h2 class="chat-title">
+                        <i class="fas fa-comments"></i> Trò chuyện trực tiếp
+                    </h2>
+                    <div class="chat-options">
+                        <button class="chat-option" title="Cài đặt chat">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                        <button class="chat-option" title="Mở rộng">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                <div class="chat-input">
+                    <div class="input-container">
+                        <input type="text" placeholder="Nhập tin nhắn..." id="message-input">
+                        <button class="emoji-trigger chat-option">
+                        <i class="far fa-smile"></i>
+                    </button>
+                        <div class="emoji-picker">
+                            <div class="emoji-grid">
+                                <!-- Emojis will be dynamically added here -->
+                            </div>
+                        </div>
+                        <button class="send-button" id="send-message">
                         <i class="fas fa-paper-plane"></i>
                         Gửi
                     </button>
+                    </div>
                 </div>
-            </div>
-        </aside>
-    </div>
+            </aside>
+        </div>
 
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            offset: 100,
-            once: true
-        });
+        <!-- Add YouTube API Script -->
+        <script src="https://www.youtube.com/iframe_api"></script>
 
-        // Theme Toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        
-        themeToggle.addEventListener('click', () => {
-            body.setAttribute('data-theme', 
-                body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
-            );
-            themeToggle.innerHTML = body.getAttribute('data-theme') === 'dark' 
-                ? '<i class="fas fa-sun"></i>' 
-                : '<i class="fas fa-moon"></i>';
-        });
+        <!-- Add the YouTube control script -->
+        <script>
+            let player;
+            let isPlaying = true;
+            let lastVolume = 100; // Track the last volume before muting
 
-        // Tab Switching
-        const tabs = document.querySelectorAll('.content-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
+            // Initialize YouTube Player
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('youtube-player', {
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                
-                tab.classList.add('active');
-                document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+            function onPlayerReady(event) {
+                player.playVideo();
+                updatePlayButton();
+                setupEventListeners();
+                startProgressBarUpdate();
+                updateVolumeUI();
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data === YT.PlayerState.PLAYING) {
+                    isPlaying = true;
+                } else if (event.data === YT.PlayerState.PAUSED) {
+                    isPlaying = false;
+                }
+                updatePlayButton();
+            }
+
+            function setupEventListeners() {
+                document.getElementById('play-pause').addEventListener('click', () => {
+                    if (player && player.getPlayerState) {
+                        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                            player.pauseVideo();
+                            isPlaying = false;
+                        } else {
+                            player.playVideo();
+                            isPlaying = true;
+                        }
+                        updatePlayButton();
+                    }
+                });
+
+                // Improved Volume Control
+                const volumeSlider = document.getElementById('volume-slider');
+                const volumeButton = document.getElementById('mute-toggle');
+
+                // Volume Button Click
+                volumeButton.addEventListener('click', () => {
+                    if (!player) return;
+
+                    if (player.isMuted()) {
+                        player.unMute();
+                        player.setVolume(lastVolume);
+                        volumeSlider.value = lastVolume;
+                    } else {
+                        lastVolume = player.getVolume();
+                        player.mute();
+                        volumeSlider.value = 0;
+                    }
+
+                    updateVolumeUI();
+                });
+
+                // Volume Slider Input
+                volumeSlider.addEventListener('input', (e) => {
+                    if (!player) return;
+
+                    const newVolume = parseInt(e.target.value);
+                    if (newVolume === 0) {
+                        player.mute();
+                    } else {
+                        player.unMute();
+                        player.setVolume(newVolume);
+                    }
+
+                    updateVolumeUI();
+                });
+
+                // Progress bar
+                document.getElementById('progress-bar').addEventListener('click', (e) => {
+                    if (player && player.getDuration) {
+                        const progressBar = document.getElementById('progress-bar');
+                        const rect = progressBar.getBoundingClientRect();
+                        const clickPosition = (e.clientX - rect.left) / rect.width;
+                        const duration = player.getDuration();
+                        player.seekTo(duration * clickPosition, true);
+                    }
+                });
+
+                // Fullscreen
+                document.getElementById('fullscreen').addEventListener('click', () => {
+                    const iframe = document.getElementById('youtube-player');
+                    if (iframe.requestFullscreen) {
+                        iframe.requestFullscreen();
+                    } else if (iframe.webkitRequestFullscreen) {
+                        iframe.webkitRequestFullscreen();
+                    } else if (iframe.mozRequestFullScreen) {
+                        iframe.mozRequestFullScreen();
+                    }
+                });
+            }
+
+            function updateVolumeUI() {
+                const volumeButton = document.getElementById('mute-toggle');
+                const volumeSlider = document.getElementById('volume-slider');
+
+                if (!player) return;
+
+                const isMuted = player.isMuted();
+                const currentVolume = isMuted ? 0 : player.getVolume();
+
+                volumeSlider.value = currentVolume;
+                const percentage = (currentVolume / 100) * 100;
+                volumeSlider.style.background = `linear-gradient(to right, var(--primary-color) ${percentage}%, rgba(255, 255, 255, 0.3) ${percentage}%)`;
+
+                let icon = 'fa-volume-up';
+                if (isMuted || currentVolume === 0) {
+                    icon = 'fa-volume-mute';
+                } else if (currentVolume < 50) {
+                    icon = 'fa-volume-down';
+                }
+                volumeButton.innerHTML = `<i class="fas ${icon}"></i>`;
+            }
+
+            function updatePlayButton() {
+                const playButton = document.getElementById('play-pause');
+                if (playButton) {
+                    playButton.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+                }
+            }
+
+            function startProgressBarUpdate() {
+                setInterval(() => {
+                    if (player && player.getCurrentTime && player.getDuration) {
+                        const currentTime = player.getCurrentTime();
+                        const duration = player.getDuration();
+                        const progress = (currentTime / duration) * 100;
+                        const progressBar = document.getElementById('progress');
+                        if (progressBar) {
+                            progressBar.style.width = `${progress}%`;
+                        }
+                    }
+                }, 1000);
+            }
+        </script>
+
+        <script>
+            // Initialize AOS
+            AOS.init({
+                duration: 800,
+                offset: 100,
+                once: true
             });
-        });
 
-        // Chat Functionality
-        const chatMessages = document.getElementById('chat-messages');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-message');
-        
-        const mockUsers = [
-            { name: 'Minh Anh', badge: 'Mod' },
-            { name: 'Hoàng Long', badge: 'VIP' },
-            { name: 'Thu Hà', badge: null },
-            { name: 'Đức Nam', badge: 'Admin' }
-        ];
+            // Theme Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
 
-        function createMessage(text, user) {
-            const message = document.createElement('div');
-            message.className = 'message';
-            message.innerHTML = `
+            themeToggle.addEventListener('click', () => {
+                body.setAttribute('data-theme',
+                    body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+                );
+                themeToggle.innerHTML = body.getAttribute('data-theme') === 'dark' ?
+                    '<i class="fas fa-sun"></i>' :
+                    '<i class="fas fa-moon"></i>';
+            });
+
+            // Tab Switching
+            const tabs = document.querySelectorAll('.content-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+                });
+            });
+
+            // Chat Functionality
+            const chatMessages = document.getElementById('chat-messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-message');
+
+            const mockUsers = [{
+                    name: 'Minh Anh',
+                    badge: 'Mod'
+                },
+                {
+                    name: 'Hoàng Long',
+                    badge: 'VIP'
+                },
+                {
+                    name: 'Thu Hà',
+                    badge: null
+                },
+                {
+                    name: 'Đức Nam',
+                    badge: 'Admin'
+                }
+            ];
+
+            function createMessage(text, user) {
+                const message = document.createElement('div');
+                message.className = 'message';
+                message.innerHTML = `
                 <div class="message-header">
                     <span class="username">
                         ${user.name}
@@ -1011,84 +1239,88 @@
                 </div>
                 <div class="message-content">${text}</div>
             `;
-            return message;
-        }
-
-        // Add some initial messages
-        const initialMessages = [
-            'Chúc mừng các tân cử nhân! 🎓',
-            'Buổi lễ thật trang trọng và ý nghĩa 👏',
-            'Chúc các bạn thành công trên con đường sắp tới 🌟',
-            'Cảm động quá! 😊'
-        ];
-
-        initialMessages.forEach((text, index) => {
-            setTimeout(() => {
-                const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-                const message = createMessage(text, randomUser);
-                chatMessages.appendChild(message);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, index * 1000);
-        });
-
-        // Send message functionality
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (text) {
-                const message = createMessage(text, { name: 'Bạn', badge: null });
-                chatMessages.appendChild(message);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                messageInput.value = '';
+                return message;
             }
-        }
 
-        sendButton.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+            // Add some initial messages
+            const initialMessages = [
+                'Chúc mừng các tân cử nhân! 🎓',
+                'Buổi lễ thật trang trọng và ý nghĩa 👏',
+                'Chúc các bạn thành công trên con đường sắp tới 🌟',
+                'Cảm động quá! 😊'
+            ];
 
-        // Video player controls animation
-        const videoContainer = document.querySelector('.video-container');
-        const videoControls = document.querySelector('.video-controls');
-
-        let controlsTimeout;
-
-        videoContainer.addEventListener('mousemove', () => {
-            videoControls.style.opacity = '1';
-            clearTimeout(controlsTimeout);
-            controlsTimeout = setTimeout(() => {
-                videoControls.style.opacity = '0';
-            }, 3000);
-        });
-
-        // Emoji picker functionality
-        const emojiTrigger = document.querySelector('.emoji-trigger');
-        const emojiPicker = document.querySelector('.emoji-picker');
-        const emojiGrid = document.querySelector('.emoji-grid');
-
-        const emojis = ['😊', '👋', '❤️', '👏', '🎓', '🌟', '💪', '🎉', '🙌', '✨'];
-
-        emojis.forEach(emoji => {
-            const emojiItem = document.createElement('div');
-            emojiItem.className = 'emoji-item';
-            emojiItem.textContent = emoji;
-            emojiItem.addEventListener('click', () => {
-                messageInput.value += emoji;
-                emojiPicker.style.display = 'none';
+            initialMessages.forEach((text, index) => {
+                setTimeout(() => {
+                    const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+                    const message = createMessage(text, randomUser);
+                    chatMessages.appendChild(message);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, index * 1000);
             });
-            emojiGrid.appendChild(emojiItem);
-        });
 
-        emojiTrigger.addEventListener('click', () => {
-            emojiPicker.style.display = 
-                emojiPicker.style.display === 'block' ? 'none' : 'block';
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!emojiPicker.contains(e.target) && !emojiTrigger.contains(e.target)) {
-                emojiPicker.style.display = 'none';
+            // Send message functionality
+            function sendMessage() {
+                const text = messageInput.value.trim();
+                if (text) {
+                    const message = createMessage(text, {
+                        name: 'Bạn',
+                        badge: null
+                    });
+                    chatMessages.appendChild(message);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    messageInput.value = '';
+                }
             }
-        });
-    </script>
+
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Video player controls animation
+            const videoContainer = document.querySelector('.video-container');
+            const videoControls = document.querySelector('.video-controls');
+
+            let controlsTimeout;
+
+            videoContainer.addEventListener('mousemove', () => {
+                videoControls.style.opacity = '1';
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(() => {
+                    videoControls.style.opacity = '0';
+                }, 3000);
+            });
+
+            // Emoji picker functionality
+            const emojiTrigger = document.querySelector('.emoji-trigger');
+            const emojiPicker = document.querySelector('.emoji-picker');
+            const emojiGrid = document.querySelector('.emoji-grid');
+
+            const emojis = ['😊', '👋', '❤️', '👏', '🎓', '🌟', '💪', '🎉', '🙌', '✨'];
+
+            emojis.forEach(emoji => {
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'emoji-item';
+                emojiItem.textContent = emoji;
+                emojiItem.addEventListener('click', () => {
+                    messageInput.value += emoji;
+                    emojiPicker.style.display = 'none';
+                });
+                emojiGrid.appendChild(emojiItem);
+            });
+
+            emojiTrigger.addEventListener('click', () => {
+                emojiPicker.style.display =
+                    emojiPicker.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!emojiPicker.contains(e.target) && !emojiTrigger.contains(e.target)) {
+                    emojiPicker.style.display = 'none';
+                }
+            });
+        </script>
 </body>
+
 </html>
