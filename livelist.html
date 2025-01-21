@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <style>
         /* Core Styles */
+
         * {
             margin: 0;
             padding: 0;
@@ -57,19 +59,35 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         body {
@@ -113,7 +131,8 @@
             box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
         }
 
-                /* Header Styles */
+        /* Header Styles */
+
         .header {
             position: fixed;
             top: 0;
@@ -157,12 +176,14 @@
         }
 
         /* Main Container */
+
         .main-container {
             margin-top: 80px;
             padding: 2rem 5%;
         }
 
         /* Filter Section */
+
         .filter-section {
             background: var(--filter-bg);
             border-radius: 15px;
@@ -226,6 +247,7 @@
         }
 
         /* Content Grid */
+
         .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -281,7 +303,27 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .live-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
             animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         .recorded-badge {
@@ -349,6 +391,7 @@
         }
 
         /* Section Headers */
+
         .section-header {
             margin-bottom: 2rem;
             padding-bottom: 1rem;
@@ -364,6 +407,7 @@
         }
 
         /* Loading Skeleton */
+
         .skeleton {
             background: var(--skeleton-bg);
             position: relative;
@@ -382,26 +426,25 @@
         }
 
         /* Responsive Design */
+
         @media (max-width: 768px) {
             .filter-section {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .filter-group {
                 flex-wrap: wrap;
             }
-
             .search-box {
                 width: 100%;
             }
-
             .content-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         /* Scrollbar Styling */
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -418,9 +461,9 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--hover-color);
         }
-
     </style>
 </head>
+
 <body>
     <header class="header">
         <a href="#" class="logo">
@@ -475,8 +518,7 @@
         <section>
             <div class="section-header">
                 <h2 class="section-title">
-                    <i class="fas fa-broadcast-tower"></i>
-                    Đang Live
+                    <i class="fas fa-broadcast-tower"></i> Đang Live
                     <span class="live-count" style="font-size: 1rem; background: var(--live-color); color: white; padding: 0.2rem 0.8rem; border-radius: 20px;">24 live</span>
                 </h2>
             </div>
@@ -489,8 +531,7 @@
         <section>
             <div class="section-header">
                 <h2 class="section-title">
-                    <i class="fas fa-clock"></i>
-                    Live Đã Phát
+                    <i class="fas fa-clock"></i> Live Đã Phát
                     <span style="font-size: 1rem; background: var(--primary-color); color: white; padding: 0.2rem 0.8rem; border-radius: 20px;">200+ video</span>
                 </h2>
             </div>
@@ -502,131 +543,304 @@
     </main>
 
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true
-        });
+// Initialize AOS
+AOS.init({
+    duration: 800,
+    once: true
+});
 
-        // Theme Toggle functionality remains the same
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        
-        themeToggle.addEventListener('click', () => {
-            body.setAttribute('data-theme', 
-                body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
-            );
-            themeToggle.innerHTML = body.getAttribute('data-theme') === 'dark' 
-                ? '<i class="fas fa-sun"></i>' 
-                : '<i class="fas fa-moon"></i>';
-        });
+// Theme Toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
 
-        // Array of Vietnamese universities
-        const universities = [
-            "Đại học Quốc gia Hà Nội",
-            "Đại học Bách Khoa Hà Nội",
-            "Đại học Ngoại thương",
-            "Đại học Kinh tế Quốc dân",
-            "Học viện Ngân hàng",
-            "Đại học Y Hà Nội",
-            "Đại học FPT",
-            "Đại học Văn Lang",
-            "Đại học Tôn Đức Thắng",
-            "Đại học RMIT Việt Nam"
-        ];
+themeToggle.addEventListener('click', () => {
+    body.setAttribute('data-theme',
+        body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    );
+    themeToggle.innerHTML = body.getAttribute('data-theme') === 'dark' ?
+        '<i class="fas fa-sun"></i>' :
+        '<i class="fas fa-moon"></i>';
+});
 
-        // Array of realistic stream titles
-        const liveStreamTitles = [
-            "Lễ Tốt nghiệp Khoa CNTT năm 2023",
-            "Hội thảo: Trí tuệ nhân tạo trong Y học hiện đại",
-            "Talkshow: Khởi nghiệp trong thời đại số",
-            "Lễ khai giảng năm học 2023-2024",
-            "Hội nghị Sinh viên nghiên cứu khoa học",
-            "Workshop: Kỹ năng mềm trong công việc",
-            "Chung kết cuộc thi Tài năng sinh viên",
-            "Seminar: Blockchain và tương lai của Fintech",
-            "Tọa đàm: Cơ hội việc làm ngành IT",
-            "Festival Văn hóa Sinh viên 2023"
-        ];
+// Array of Vietnamese universities
+const universities = [
+    "Đại học Quốc gia Hà Nội",
+    "Đại học Bách Khoa Hà Nội",
+    "Đại học Ngoại thương",
+    "Đại học Kinh tế Quốc dân",
+    "Học viện Ngân hàng",
+    "Đại học Y Hà Nội",
+    "Đại học FPT",
+    "Đại học Văn Lang",
+    "Đại học Tôn Đức Thắng",
+    "Đại học RMIT Việt Nam",
+    "Đại học Công nghệ - ĐHQGHN",
+    "Đại học Sư phạm Hà Nội",
+    "Đại học Thương mại",
+    "Học viện Công nghệ Bưu chính Viễn thông",
+    "Đại học Hà Nội",
+    "Đại học Thủy lợi",
+    "Đại học Xây dựng",
+    "Đại học Giao thông vận tải",
+    "Đại học Công nghiệp Hà Nội",
+    "Đại học Mỏ - Địa chất"
+];
 
-        const recordedStreamTitles = [
-            "Định hướng nghề nghiệp cho sinh viên IT",
-            "Hội thảo: Chuyển đổi số trong giáo dục",
-            "Lễ kỷ niệm 65 năm thành lập trường",
-            "Talkshow: Xu hướng công nghệ 2024",
-            "Workshop: Digital Marketing cho người mới bắt đầu",
-            "Seminar: Machine Learning trong thực tiễn",
-            "Giao lưu doanh nghiệp - sinh viên",
-            "Hội thảo: Phát triển bền vững trong kinh doanh",
-            "Tọa đàm: Kinh nghiệm thực tập tại doanh nghiệp",
-            "Festival Sáng tạo & Khởi nghiệp"
-        ];
+// Array of realistic stream titles
+const liveStreamTitles = [
+    "Lễ Tốt nghiệp Khoa CNTT năm 2023",
+    "Hội thảo: Trí tuệ nhân tạo trong Y học hiện đại",
+    "Talkshow: Khởi nghiệp trong thời đại số",
+    "Lễ khai giảng năm học 2023-2024",
+    "Hội nghị Sinh viên nghiên cứu khoa học",
+    "Workshop: Kỹ năng mềm trong công việc",
+    "Chung kết cuộc thi Tài năng sinh viên",
+    "Seminar: Blockchain và tương lai của Fintech",
+    "Tọa đàm: Cơ hội việc làm ngành IT",
+    "Festival Văn hóa Sinh viên 2023",
+    "Hội thảo: Chuyển đổi số trong giáo dục đại học",
+    "Giao lưu doanh nghiệp - sinh viên 2023",
+    "Lễ kỷ niệm ngày Nhà giáo Việt Nam 20/11",
+    "Cuộc thi Hackathon 2023",
+    "Workshop: Xu hướng công nghệ mới",
+    "Talkshow: Định hướng nghề nghiệp",
+    "Hội thảo: Phát triển bền vững",
+    "Seminar: IoT và Smart City",
+    "Festival Sáng tạo & Khởi nghiệp",
+    "Diễn đàn Sinh viên ASEAN 2023"
+];
 
-        // Function to get random item from array
-        function getRandomItem(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
+const recordedStreamTitles = [
+    "Định hướng nghề nghiệp cho sinh viên IT",
+    "Hội thảo: Chuyển đổi số trong giáo dục",
+    "Lễ kỷ niệm 65 năm thành lập trường",
+    "Talkshow: Xu hướng công nghệ 2024",
+    "Workshop: Digital Marketing cho người mới bắt đầu",
+    "Seminar: Machine Learning trong thực tiễn",
+    "Giao lưu doanh nghiệp - sinh viên",
+    "Hội thảo: Phát triển bền vững trong kinh doanh",
+    "Tọa đàm: Kinh nghiệm thực tập tại doanh nghiệp",
+    "Festival Sáng tạo & Khởi nghiệp",
+    "Hội nghị khoa học sinh viên năm 2023",
+    "Chương trình giao lưu văn hóa quốc tế",
+    "Workshop: Kỹ năng thuyết trình chuyên nghiệp",
+    "Seminar: Big Data và ứng dụng",
+    "Talkshow: Khởi nghiệp cùng chuyên gia",
+    "Hội thảo: An toàn thông tin mạng",
+    "Lễ trao giải cuộc thi Innovation 2023",
+    "Workshop: UI/UX Design Trends",
+    "Tọa đàm: Nghề nghiệp tương lai",
+    "Diễn đàn khoa học công nghệ sinh viên"
+];
 
-        // Modified createStreamCard function
-        function createStreamCard(isLive = true) {
-            const title = isLive ? getRandomItem(liveStreamTitles) : getRandomItem(recordedStreamTitles);
-            const university = getRandomItem(universities);
-            const viewers = Math.floor(Math.random() * 10000);
-            const duration = `${Math.floor(Math.random() * 2 + 1)}:${Math.floor(Math.random() * 60)}:${Math.floor(Math.random() * 60)}`;
-            
-            return `
-                <div class="stream-card" data-aos="fade-up">
-                    <div class="stream-thumbnail">
-                        <img src="https://picsum.photos/800/450?random=${Math.random()}" alt="${title}">
-                        ${isLive 
-                            ? `<div class="live-badge"><span class="pulse"></span>LIVE</div>`
-                            : `<div class="recorded-badge"><i class="fas fa-play"></i> ĐÃ PHÁT</div>`
-                        }
-                        <div class="stream-duration">${duration}</div>
+// Stream data structure
+let streams = {
+    live: [],
+    recorded: []
+};
+
+// Function to get random item from array
+function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+// Create stream object
+function createStreamObject(isLive = true) {
+    const title = isLive ? getRandomItem(liveStreamTitles) : getRandomItem(recordedStreamTitles);
+    const university = getRandomItem(universities);
+    const viewers = Math.floor(Math.random() * 10000);
+    const duration = `${Math.floor(Math.random() * 2 + 1)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
+    const timestamp = Date.now() - Math.floor(Math.random() * 1000000000);
+    const trending = Math.random() * 100;
+
+    return {
+        title,
+        university,
+        viewers,
+        duration,
+        timestamp,
+        trending,
+        thumbnail: `https://picsum.photos/800/450?random=${Math.random()}`,
+        universityAvatar: `https://picsum.photos/24/24?random=${Math.random()}`
+    };
+}
+
+// Generate stream card HTML
+function generateStreamCard(stream, isLive) {
+    return `
+        <div class="stream-card" data-aos="fade-up">
+            <div class="stream-thumbnail">
+                <img src="${stream.thumbnail}" alt="${stream.title}">
+                ${isLive 
+                    ? `<div class="live-badge">LIVE</div>`
+                    : `<div class="recorded-badge"><i class="fas fa-play"></i> ĐÃ PHÁT</div>`
+                }
+                <div class="stream-duration">${stream.duration}</div>
+            </div>
+            <div class="stream-info">
+                <h3 class="stream-title">${stream.title}</h3>
+                <div class="stream-meta">
+                    <div class="stream-university">
+                        <img src="${stream.universityAvatar}" alt="University" class="university-avatar">
+                        <span>${stream.university}</span>
                     </div>
-                    <div class="stream-info">
-                        <h3 class="stream-title">${title}</h3>
-                        <div class="stream-meta">
-                            <div class="stream-university">
-                                <img src="https://picsum.photos/24/24?random=${Math.random()}" alt="University" class="university-avatar">
-                                <span>${university}</span>
-                            </div>
-                            <div class="stream-stats">
-                                <span><i class="fas fa-users"></i> ${isLive ? `${viewers} đang xem` : `${viewers}K lượt xem`}</span>
-                            </div>
-                        </div>
+                    <div class="stream-stats">
+                        <span><i class="fas fa-users"></i> ${isLive ? `${stream.viewers.toLocaleString('vi-VN')} đang xem` : `${Math.floor(stream.viewers/1000)}K lượt xem`}</span>
                     </div>
                 </div>
-            `;
+            </div>
+        </div>
+    `;
+}
+
+// Initialize streams
+function initializeStreams() {
+    for (let i = 0; i < 12; i++) {
+        streams.live.push(createStreamObject(true));
+        streams.recorded.push(createStreamObject(false));
+    }
+    renderStreams();
+}
+
+// Sort streams based on selected criteria
+function sortStreams(streamArray, criteria) {
+    const sortedArray = [...streamArray];
+    switch (criteria) {
+        case 'newest':
+            return sortedArray.sort((a, b) => b.timestamp - a.timestamp);
+        case 'viewers':
+            return sortedArray.sort((a, b) => b.viewers - a.viewers);
+        case 'trending':
+            return sortedArray.sort((a, b) => b.trending - a.trending);
+        default:
+            return sortedArray;
+    }
+}
+
+// Filter streams by university
+function filterByUniversity(streamArray, university) {
+    if (university === 'all') return streamArray;
+    return streamArray.filter(stream => {
+        const normalizedUniversity = stream.university.toLowerCase();
+        return normalizedUniversity.includes(university.toLowerCase());
+    });
+}
+
+// Filter streams by category
+function filterByCategory(streamArray, category) {
+    if (category === 'all') return streamArray;
+    return streamArray.filter(stream => {
+        const title = stream.title.toLowerCase();
+        switch (category) {
+            case 'academic':
+                return title.includes('hội thảo') || title.includes('seminar') || title.includes('nghiên cứu');
+            case 'culture':
+                return title.includes('văn hóa') || title.includes('festival') || title.includes('giao lưu');
+            case 'sports':
+                return title.includes('thể thao') || title.includes('giải đấu') || title.includes('tournament');
+            default:
+                return true;
+        }
+    });
+}
+
+// Search streams
+function searchStreams(streamArray, searchTerm) {
+    if (!searchTerm) return streamArray;
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    return streamArray.filter(stream => 
+        stream.title.toLowerCase().includes(normalizedSearchTerm) ||
+        stream.university.toLowerCase().includes(normalizedSearchTerm)
+    );
+}
+
+// Render streams to containers
+function renderStreams() {
+    const sortCriteria = document.querySelector('.filter-select').value;
+    const universityFilter = document.querySelectorAll('.filter-select')[1].value;
+    const categoryFilter = document.querySelectorAll('.filter-select')[2].value;
+    const searchTerm = document.querySelector('.search-input').value;
+
+    ['live', 'recorded'].forEach(type => {
+        const container = document.getElementById(`${type}-streams`);
+        let filteredStreams = streams[type];
+        
+        // Apply filters
+        filteredStreams = sortStreams(filteredStreams, sortCriteria);
+        filteredStreams = filterByUniversity(filteredStreams, universityFilter);
+        filteredStreams = filterByCategory(filteredStreams, categoryFilter);
+        filteredStreams = searchStreams(filteredStreams, searchTerm);
+
+        // Update counts
+        const countDisplay = container.closest('section').querySelector('.live-count');
+        if (countDisplay) {
+            countDisplay.textContent = type === 'live' 
+                ? `${filteredStreams.length} live` 
+                : `${filteredStreams.length}+ video`;
         }
 
-        // Populate streams
-        const liveContainer = document.getElementById('live-streams');
-        const recordedContainer = document.getElementById('recorded-streams');
+        // Render
+        container.innerHTML = filteredStreams
+            .map(stream => generateStreamCard(stream, type === 'live'))
+            .join('');
+    });
 
-        // Generate streams
-        for(let i = 0; i < 12; i++) {
-            liveContainer.innerHTML += createStreamCard(true);
-            recordedContainer.innerHTML += createStreamCard(false);
+    // Refresh AOS
+    AOS.refresh();
+}
+
+// Event listeners for filters
+document.querySelectorAll('.filter-select').forEach(select => {
+    select.addEventListener('change', renderStreams);
+});
+
+document.querySelector('.search-input').addEventListener('input', renderStreams);
+
+// Load more functionality
+document.querySelectorAll('.load-more').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = e.target.closest('section').querySelector('.content-grid').id.includes('live') ? 'live' : 'recorded';
+        
+        // Add 4 more streams
+        for (let i = 0; i < 4; i++) {
+            streams[type].push(createStreamObject(type === 'live'));
         }
+        renderStreams();
+    });
+});
 
-        // Add click handlers for load more buttons
-        document.querySelectorAll('.load-more').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const container = e.target.closest('section').querySelector('.content-grid');
-                const isLive = container.id === 'live-streams';
-                
-                // Add 4 more cards when clicked
-                for(let i = 0; i < 4; i++) {
-                    container.innerHTML += createStreamCard(isLive);
-                }
-                
-                // Initialize AOS for new elements
-                AOS.refresh();
-            });
-        });
+// Initialize the page
+initializeStreams();
 
+// Optional: Add debouncing for search input
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Apply debouncing to search input
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+    searchInput.addEventListener('input', debounce(() => renderStreams(), 300));
+}
+
+// Add loading animation for images
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('load', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.target.classList.add('loaded');
+        }
+    }, true);
+});
     </script>
 </body>
+
 </html>
