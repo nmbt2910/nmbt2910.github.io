@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ReBuy - Mua Lại Để Tái Sử Dụng</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html,body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .neumorph {
+      background: #f4f8fb;
+      box-shadow: 2px 2px 18px #e8eef3, -2px -2px 18px #ffffff;
+      border-radius: 1.5rem;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    ::-webkit-scrollbar { height: 6px; width: 6px; background: transparent;}
+    ::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .carousel-track::-webkit-scrollbar {
+      height: 8px;
+      background: transparent;
+    }
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 80%);
+      border-radius: 9999px;
+      min-width: 60px;
+      transition: background 0.3s;
+    }
+    .carousel-track {
+      scrollbar-color: #38bdf8 #e0f2fe;
+      scrollbar-width: thin;
+    }
+    .carousel-track:active::-webkit-scrollbar-thumb,
+    .carousel-track:focus::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #6366f1 0%, #38bdf8 80%);
+    }
+    .glass-hover:hover { 
+      box-shadow: 0 8px 32px 0 rgba(72, 139, 255, 0.09), 0 2px 12px 0 rgba(80,120,200,0.12); 
+      transform: translateY(-4px) scale(1.04);
+    }
+    .btn-main { box-shadow: 0 2px 10px 0 rgba(56,189,248,0.08);}
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .header-shadow {
+      box-shadow: 0 2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .footer-shadow {
+      box-shadow: 0 -2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .social-round {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #38bdf8;
+      transition: all 0.15s;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 10px 0 rgba(56,189,248,0.07);
+    }
+    .social-round:hover {
+      background: linear-gradient(135deg, #38bdf8 60%, #6366f1 100%);
+      color: #fff;
+      transform: scale(1.11);
+      box-shadow: 0 8px 24px 0 rgba(56,189,248,0.19);
+    }
+    @media (max-width: 900px) {
+      .glass { border-radius: 1.1rem;}
+      .neumorph { border-radius: 1.1rem;}
+    }
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.1rem !important;
+        line-height: 2.6rem !important;
+        min-height: 3.1rem;
+        word-break: break-word;
+      }
+    }
+    @media (min-width: 769px) {
+      .hero-title {
+        font-size: 2.9rem !important;
+        line-height: 3.7rem !important;
+        min-height: 4.2rem;
+        word-break: break-word;
+      }
+    }
+    /* Location pin animation */
+    .pulse-pin {
+      animation: pulsePin 1.5s infinite;
+    }
+    @keyframes pulsePin {
+      0% { filter: drop-shadow(0 0 0 #38bdf8);}
+      70% { filter: drop-shadow(0 0 8px #38bdf8);}
+      100% { filter: drop-shadow(0 0 0 #38bdf8);}
+    }
+    .search-loc {
+      position: absolute;
+      left: 0.5rem; top: 0.5rem; bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      z-index: 20;
+      background: rgba(236,245,251,0.95);
+      border-radius: 0.85rem;
+      padding: 0 0.9rem 0 0.7rem;
+      box-shadow: 0 2px 12px 0 rgba(56,189,248,0.05);
+      border: 1px solid #e0f2fe;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #0ea5e9;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .search-loc:hover {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    @media (max-width: 640px) {
+      .search-loc { padding: 0 0.5rem 0 0.4rem; font-size: 0.89rem;}
+    }
+    /* Responsive: location hide on mobile, show above search for xs screen */
+    @media (max-width: 450px) {
+      .search-loc { 
+        position: static !important; 
+        margin-bottom: 0.5rem;
+        width: 100%;
+        border-radius: 1rem;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+
+  <!-- Header: Full Width, Elegant Spacing -->
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50" data-aos="fade-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 lg:py-3">
+      <div class="flex items-center gap-3 min-w-[110px]">
+        <span class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</span>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Beta</span>
+      </div>
+      <!-- Search with Location -->
+      <form class="flex-1 mx-4 max-w-2xl hidden md:flex relative" role="search" autocomplete="off">
+        <!-- Định vị vị trí -->
+        <div class="search-loc select-none" tabindex="0" title="Chọn vị trí của bạn" id="locationBtn">
+          <i class="ph ph-map-pin pulse-pin text-lg"></i>
+          <span id="user-location">Vị trí của bạn</span>
+        </div>
+        <input 
+          aria-label="Tìm kiếm sản phẩm" 
+          class="glass w-full px-6 py-3 rounded-lg outline-none focus:ring-2 focus:ring-sky-300 transition-all text-base text-gray-800 placeholder-gray-400 pl-[150px] md:pl-[165px]" 
+          type="search" 
+          placeholder="Tìm kiếm sản phẩm, danh mục..." 
+          style="padding-left: 155px;"
+          />
+        <button type="submit" class="ml-2 btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-3 rounded-lg font-semibold shadow hover:scale-105 transition whitespace-nowrap">Tìm kiếm</button>
+      </form>
+      <div class="flex items-center gap-2 sm:gap-4 min-w-[200px] justify-end">
+        <button class="glass px-5 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+          <i class="ph ph-user text-xl"></i>
+          Đăng nhập
+        </button>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition flex items-center gap-2 text-base">
+          <i class="ph ph-plus-circle text-xl"></i>
+          Đăng tin
+        </button>
+      </div>
+    </div>
+    <!-- Location on mobile -->
+    <div class="block md:hidden max-w-2xl mx-auto px-4 mt-2">
+      <div class="search-loc" tabindex="0" id="locationBtnMobile" style="width:100%;">
+        <i class="ph ph-map-pin pulse-pin text-lg"></i>
+        <span id="user-location-mobile">Vị trí của bạn</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Banner -->
+  <section class="relative max-w-7xl mx-auto mt-7 px-4 flex flex-col-reverse md:flex-row items-center gap-10 py-12 glass shadow-xl rounded-3xl overflow-hidden" data-aos="fade-up">
+    <div class="flex-1 z-10">
+      <h1 class="hero-title gradient-title font-extrabold mb-4 leading-tight" style="font-size:clamp(2.2rem,6vw,3.5rem);line-height:1.12;min-height:3.5rem;">Mua Lại Để Tái Sử Dụng</h1>
+      <p class="text-lg md:text-xl text-gray-700 mb-7 font-medium max-w-xl">Nền tảng cho phép người dùng mua bán đồ cũ chất lượng cao, chủ yếu nhắm đến sinh viên, dân văn phòng, người thuê trọ – những người có nhu cầu sử dụng đồ giá rẻ mà vẫn đảm bảo chất lượng.</p>
+      <div class="flex gap-5 flex-wrap">
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-7 py-3 rounded-2xl shadow font-semibold text-lg hover:scale-105 transform transition whitespace-nowrap">Khám phá ngay</button>
+        <button class="glass border border-sky-200 text-sky-700 font-semibold px-7 py-3 rounded-2xl hover:bg-sky-50 transition whitespace-nowrap">Đăng tin bán</button>
+      </div>
+    </div>
+    <div class="flex-1 flex justify-center items-center relative min-h-[260px]">
+      <img src="https://picsum.photos/id/1016/400/270" alt="Hero" class="rounded-2xl shadow-2xl ring-2 ring-sky-100 object-cover w-[320px] h-[220px] md:w-[400px] md:h-[270px] glass border border-white/60" />
+      <div class="absolute top-5 right-6 bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-3 py-1 rounded-xl font-semibold shadow-md text-xs animate-pulse">Mới!</div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="max-w-7xl mx-auto mt-12 px-4" data-aos="fade-up">
+    <h2 class="text-2xl font-extrabold text-gray-800 mb-4">Khám phá danh mục</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-6">
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-car-simple text-3xl text-sky-400 mb-2 group-hover:scale-110 group-hover:text-indigo-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Xe cộ</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-device-mobile text-3xl text-indigo-400 mb-2 group-hover:scale-110 group-hover:text-sky-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Điện thoại</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <!-- Cải tiến icon Đồ điện tử cho nổi bật -->
+        <i class="ph ph-lamp text-3xl text-fuchsia-400 mb-2 group-hover:scale-110 group-hover:text-sky-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Đồ điện tử</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-armchair text-3xl text-green-400 mb-2 group-hover:scale-110 group-hover:text-sky-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Nội thất</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-t-shirt text-3xl text-orange-400 mb-2 group-hover:scale-110 group-hover:text-fuchsia-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Thời trang</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-baby text-3xl text-yellow-400 mb-2 group-hover:scale-110 group-hover:text-sky-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Mẹ & Bé</span>
+      </div>
+      <div class="flex flex-col items-center p-5 glass glass-hover group cursor-pointer transition-all">
+        <i class="ph ph-airplane text-3xl text-sky-400 mb-2 group-hover:scale-110 group-hover:text-indigo-400 transition"></i>
+        <span class="text-gray-700 font-semibold text-base mt-1">Du lịch</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Carousel with Modern Thin Scrollbar -->
+  <section class="max-w-7xl mx-auto mt-14 px-4" data-aos="fade-up">
+    <h2 class="text-2xl font-extrabold text-gray-800 mb-4">Sản phẩm nổi bật <span class="text-sky-400">(Video)</span></h2>
+    <div class="relative group">
+      <!-- Gradient fade cho carousel: chỉ bên phải -->
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#f2f6fa] via-[#f2f6fa]/80 to-transparent z-10"></div>
+      <!-- Carousel Track -->
+      <div class="carousel-track overflow-x-auto flex gap-4 md:gap-6 pb-2 pt-1" tabindex="0">
+        <div class="min-w-[210px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1025/220/130" alt="Video 1" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="absolute top-2 left-2 bg-white/90 text-sky-600 px-2 py-0.5 rounded-lg text-xs font-semibold">2 phút trước</span>
+          <div class="font-semibold text-gray-800 truncate">Bàn làm việc hiện đại</div>
+          <div class="text-sky-500 font-bold mt-1">2.200.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1040/220/130" alt="Video 2" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="absolute top-2 left-2 bg-white/90 text-indigo-600 px-2 py-0.5 rounded-lg text-xs font-semibold">7 phút trước</span>
+          <div class="font-semibold text-gray-800 truncate">iPhone 13 Pro Max</div>
+          <div class="text-sky-500 font-bold mt-1">13.500.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1052/220/130" alt="Video 3" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="absolute top-2 left-2 bg-white/90 text-fuchsia-600 px-2 py-0.5 rounded-lg text-xs font-semibold">13 phút trước</span>
+          <div class="font-semibold text-gray-800 truncate">Ghế Sofa êm ái</div>
+          <div class="text-sky-500 font-bold mt-1">1.900.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1062/220/130" alt="Video 4" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="absolute top-2 left-2 bg-white/90 text-green-600 px-2 py-0.5 rounded-lg text-xs font-semibold">18 phút trước</span>
+          <div class="font-semibold text-gray-800 truncate">Laptop văn phòng</div>
+          <div class="text-sky-500 font-bold mt-1">5.800.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1082/220/130" alt="Video 5" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="absolute top-2 left-2 bg-white/90 text-yellow-600 px-2 py-0.5 rounded-lg text-xs font-semibold">26 phút trước</span>
+          <div class="font-semibold text-gray-800 truncate">Tủ lạnh mini</div>
+          <div class="text-sky-500 font-bold mt-1">1.200.000₫</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Recommendations Grid -->
+  <section class="max-w-7xl mx-auto mt-14 px-4" data-aos="fade-up">
+    <h2 class="text-2xl font-extrabold text-gray-800 mb-4">Tin đăng dành cho bạn</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-7">
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/100/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Xe máy cũ giá rẻ</div>
+        <div class="text-sky-500 font-bold mt-1">5.000.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Bình Thạnh</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/110/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">iPhone 14 ProMax</div>
+        <div class="text-sky-500 font-bold mt-1">13.500.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> TP. Hà Nội</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/120/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Nhà thuê full nội thất</div>
+        <div class="text-sky-500 font-bold mt-1">2.100.000₫/tháng</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Tân Phú</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/130/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Google Pixel 6a</div>
+        <div class="text-sky-500 font-bold mt-1">2.600.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 3</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/140/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Tuyển tập VU</div>
+        <div class="text-sky-500 font-bold mt-1">Miễn phí</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 10</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/150/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Đổi máy 1.5HP</div>
+        <div class="text-sky-500 font-bold mt-1">2.000.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Tân Bình</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/160/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Galaxy S23 plus</div>
+        <div class="text-sky-500 font-bold mt-1">11.100.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 7</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/170/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Tuyển dụng lao động phổ thông</div>
+        <div class="text-sky-500 font-bold mt-1">6 triệu/tháng</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 5</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/180/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">iPhone X 64GB</div>
+        <div class="text-sky-500 font-bold mt-1">3.000.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 9</div>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col">
+        <img src="https://picsum.photos/id/190/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Phòng sạch sẽ, tiện nghi</div>
+        <div class="text-sky-500 font-bold mt-1">2.000.000₫/tháng</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 4</div>
+      </div>
+    </div>
+    <div class="flex justify-center mt-7">
+      <button class="glass px-8 py-3 rounded-xl font-bold text-sky-500 border border-sky-200 hover:bg-sky-50 transition-all shadow">Xem thêm</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="w-full footer-shadow bg-white/95 mt-16 border-t border-sky-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10 py-10 rounded-none md:rounded-3xl grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <span class="gradient-title font-extrabold text-2xl tracking-tight">ReBuy</span>
+        <p class="mt-3 text-sm font-medium text-gray-400">
+          Nền tảng mua bán đồ cũ chất lượng cao cho sinh viên, dân văn phòng, người thuê trọ.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <a href="#" class="social-round" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Messenger"><i class="ph ph-messenger-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Danh mục</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Xe cộ</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điện thoại</a></li>
+          <li><a href="#" class="hover:text-sky-500">Đồ điện tử</a></li>
+          <li><a href="#" class="hover:text-sky-500">Nội thất</a></li>
+          <li><a href="#" class="hover:text-sky-500">Thời trang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ khách hàng</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Trung tâm trợ giúp</a></li>
+          <li><a href="#" class="hover:text-sky-500">An toàn & bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Liên hệ hỗ trợ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Về ReBuy</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Giới thiệu</a></li>
+          <li><a href="#" class="hover:text-sky-500">Chính sách bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điều khoản sử dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+      © 2024 ReBuy. Made for the community. | Liên hệ: support@rebuy.vn
+    </div>
+  </footer>
+
+  <script>
+    // Animate On Scroll
+    AOS.init({ duration: 900, once: true });
+
+    // Responsive Search
+    function handleSearchBox() {
+      const form = document.querySelector('form[role="search"]');
+      if(window.innerWidth < 768) form.classList.remove('flex');
+      else form.classList.add('flex');
+    }
+    window.addEventListener('resize', handleSearchBox); handleSearchBox();
+
+    // Định vị vị trí người dùng (fake demo)
+    function setLocation(name) {
+      if(document.getElementById('user-location')) document.getElementById('user-location').textContent = name;
+      if(document.getElementById('user-location-mobile')) document.getElementById('user-location-mobile').textContent = name;
+    }
+    // Khi click vào location button
+    function getUserLocation() {
+      if (!navigator.geolocation) {
+        setLocation('Không hỗ trợ vị trí');
+        return;
+      }
+      setLocation('Đang lấy vị trí...');
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        // Có thể fetch address bằng API, demo chỉ lấy lat,lon
+        const lat = pos.coords.latitude.toFixed(4);
+        const lon = pos.coords.longitude.toFixed(4);
+        setLocation(`(${lat}, ${lon})`);
+      }, function() {
+        setLocation('Không xác định');
+      }, {timeout: 5000});
+    }
+    document.getElementById('locationBtn').onclick = getUserLocation;
+    if(document.getElementById('locationBtnMobile')) document.getElementById('locationBtnMobile').onclick = getUserLocation;
+  </script>
+</body>
+</html>
