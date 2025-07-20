@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Thông tin người bán - ReBuy</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html,body{
+      font-family:'Inter',sans-serif;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      min-height: 100vh;
+    }
+    body{position:relative;}
+    .noise{
+      pointer-events:none;
+      opacity: 0.09;
+      position:fixed;
+      inset:0;
+      z-index:0;
+      background-image:url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode:overlay;
+    }
+    .float-shape{
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.13;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1{width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2{width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3{width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float{
+      0%,100%{transform:translateY(0) scale(1);}
+      50%{transform:translateY(-25px) scale(1.09);}
+    }
+    .glass{
+      background:rgba(255,255,255,0.95);
+      box-shadow:0 4px 24px 0 rgba(17,56,90,0.10),0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter:blur(14px);
+      border-radius:1.7rem;
+      border:1.2px solid rgba(202,228,248,0.13);
+    }
+    .glass-hover:hover{
+      box-shadow:0 8px 38px 0 rgba(72,139,255,0.14),0 4px 18px 0 rgba(80,120,200,0.13);
+      transform:translateY(-5px) scale(1.04);
+    }
+    .gradient-title{
+      background:linear-gradient(90deg,#38bdf8 0%,#6366f1 60%,#fbbf24 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-fill-color:transparent;
+    }
+    .btn-main{box-shadow:0 2px 10px 0 rgba(56,189,248,0.09);}
+    .tab-btn{
+      font-weight:700;
+      color:#38bdf8;
+      background: #f4f8fb;
+      border-radius:1.3em 1.3em 0 0;
+      padding:0.9em 2.1em 0.9em 2em;
+      margin-right:0.18em;
+      border:1.7px solid #bae6fd;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.02);
+      transition:all 0.16s;
+      outline:none;
+      font-size:1.1em;
+    }
+    .tab-btn.active{
+      color:#fff;
+      background:linear-gradient(90deg,#38bdf8 60%,#6366f1 100%);
+      border:2px solid #38bdf8;
+      z-index:2;
+      box-shadow:0 3px 12px 0 rgba(56,189,248,0.07);
+      position:relative;
+    }
+    .tab-btn:hover:not(.active){
+      background:#e0f2fe;
+      color:#0ea5e9;
+    }
+    .shop-badge{
+      font-size:0.98em;
+      background:#e0f2fe;
+      color:#38bdf8;
+      font-weight:600;
+      padding:0.22em 1em;
+      border-radius:1em;
+      border:1.3px solid #bae6fd;
+      margin-right:0.5em;
+      display:inline-flex;
+      align-items:center;
+      gap:0.3em;
+    }
+    .shop-badge.verified{
+      background:linear-gradient(90deg,#38bdf8 60%,#6366f1 100%);
+      color:#fff;
+      border:none;
+    }
+    .seller-avatar{
+      width:88px;
+      height:88px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2.2px solid #e0f2fe;
+      background:#fff;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.10);
+    }
+    .follow-btn{
+      background:#e0f2fe;
+      color:#38bdf8;
+      font-weight:600;
+      border-radius:1.2em;
+      padding:0.7em 1.8em;
+      transition:all 0.16s;
+      border:none;
+      font-size:1.08em;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.09);
+      display:flex;
+      align-items:center;
+      gap:0.5em;
+    }
+    .follow-btn.active,
+    .follow-btn:hover{
+      background:linear-gradient(90deg,#38bdf8 60%,#6366f1 100%);
+      color:#fff;
+      transform:scale(1.07);
+    }
+    .msg-btn{
+      background:#fff;
+      color:#6366f1;
+      border:1.7px solid #bae6fd;
+      font-weight:600;
+      border-radius:1.2em;
+      padding:0.7em 1.6em;
+      margin-left:0.6em;
+      font-size:1.08em;
+      transition:all 0.16s;
+      display:flex;
+      align-items:center;
+      gap:0.5em;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.04);
+    }
+    .msg-btn:hover{
+      background:#e0f2fe;
+      color:#38bdf8;
+    }
+    .product-card .fav-btn{
+      background:#e0f2fe;border-radius:50%;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.14);
+      width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:all 0.13s;position:absolute;top:1em;right:1em;z-index:3;
+    }
+    .product-card .fav-btn.active,.product-card .fav-btn:hover{
+      background:linear-gradient(135deg,#38bdf8 60%,#6366f1 100%);
+      color:#fff;transform:scale(1.11);
+    }
+    .product-card .tag{
+      position:absolute;top:1em;left:1em;
+      background:#e0f2fe;
+      color:#38bdf8;
+      font-weight:600;
+      font-size:0.97em;
+      padding:0.18em 0.9em;
+      border-radius:1em;
+      z-index:2;
+    }
+    .product-card .tag.sold{
+      background:linear-gradient(90deg,#6366f1 70%,#38bdf8 100%);
+      color:#fff;
+    }
+    @media (max-width: 900px){.glass{border-radius:1.1rem;}}
+    @media (max-width: 600px){
+      .seller-avatar{width:64px;height:64px;}
+      .tab-btn{padding:0.7em 1.1em;}
+    }
+    @media (max-width:500px){
+      .tab-btn{font-size:0.98em;}
+      .follow-btn,.msg-btn{padding:0.56em 1.1em;font-size:0.97em;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <!-- BG shapes + noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+
+  <!-- Header -->
+  <!-- ...header code unchanged... -->
+
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50" data-aos="fade-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 lg:py-3">
+      <div class="flex items-center gap-3 min-w-[110px]">
+        <a href="/" class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</a>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Beta</span>
+      </div>
+      <form class="flex-1 mx-4 max-w-lg hidden md:flex relative" role="search" autocomplete="off">
+        <input 
+          aria-label="Tìm sản phẩm trong shop..." 
+          class="glass w-full px-6 py-3 rounded-lg outline-none focus:ring-2 focus:ring-sky-300 transition-all text-base text-gray-800 placeholder-gray-400" 
+          type="search" 
+          placeholder="Tìm sản phẩm trong cửa hàng này..." />
+        <button type="submit" class="ml-2 btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-3 rounded-lg font-semibold shadow hover:scale-105 transition whitespace-nowrap">
+          <i class="ph ph-magnifying-glass text-xl"></i>
+        </button>
+      </form>
+      <div class="flex items-center gap-2 sm:gap-4 min-w-[200px] justify-end">
+        <button class="glass px-5 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+          <i class="ph ph-user text-xl"></i>
+          Đăng nhập
+        </button>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition flex items-center gap-2 text-base">
+          <i class="ph ph-plus-circle text-xl"></i>
+          Đăng tin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shop Info Card -->
+  <!-- ...shop info code unchanged... -->
+
+  <section class="max-w-7xl mx-auto px-2 sm:px-6 pt-7 pb-2 relative z-10" data-aos="fade-up">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-10 items-start glass shadow-xl rounded-3xl p-6 md:p-9 mb-7">
+      <!-- Avatar & badges -->
+      <div class="flex flex-col items-center md:items-start gap-4 min-w-[90px]">
+        <img src="https://picsum.photos/id/1005/120/120" alt="avatar" class="seller-avatar shadow-lg" />
+        <span class="shop-badge verified"><i class="ph ph-check-circle"></i> Đã xác thực</span>
+        <span class="shop-badge"><i class="ph ph-users-three"></i> 2.3k theo dõi</span>
+      </div>
+      <!-- Info -->
+      <div class="flex-1 flex flex-col gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="font-extrabold text-2xl md:text-3xl gradient-title">Toto Mobile</h1>
+          <span class="flex items-center gap-1 text-yellow-400 font-bold text-lg ml-2">
+            <i class="ph ph-star-fill"></i>
+            5.0
+            <span class="text-gray-500 font-medium text-base ml-1">(39 đánh giá)</span>
+          </span>
+        </div>
+        <div class="flex flex-wrap gap-3 mb-2 mt-1">
+          <span class="text-gray-600 font-semibold text-base"><i class="ph ph-map-pin"></i> Quận Gò Vấp, Tp Hồ Chí Minh</span>
+          <span class="shop-badge"><i class="ph ph-calendar-blank"></i> Tham gia: 4 tháng</span>
+          <span class="shop-badge"><i class="ph ph-lightning"></i> Phản hồi chat: 92%</span>
+        </div>
+        <p class="text-gray-700 mb-2 max-w-2xl">TOTO MOBILE chuyên bán các dòng điện thoại Samsung - Sony - iPhone - Google... Hỗ trợ trả góp, quà tặng kèm, ship toàn quốc.</p>
+<div class="flex flex-wrap gap-3 mt-2">
+  <button id="followBtn" class="follow-btn" type="button">
+    <i class="ph ph-heart"></i> Theo dõi
+  </button>
+  <!-- Nút gọi điện thoại -->
+  <a href="tel:0912345678" 
+     class="follow-btn flex items-center gap-2 bg-green-50 text-green-600 hover:bg-gradient-to-r hover:from-green-400 hover:to-emerald-500 hover:text-white transition-all"
+     style="background: #e0fbe8; color: #16a34a;">
+    <i class="ph ph-phone-call"></i> Gọi 0912 345 678
+  </a>
+  <button class="msg-btn" type="button"><i class="ph ph-chat-circle"></i> Nhắn tin</button>
+  <button class="msg-btn" type="button"><i class="ph ph-share-network"></i> Chia sẻ shop</button>
+</div>
+    </div>
+  </section>
+
+  <!-- Tabs: Đang bán / Đã bán -->
+  <section class="max-w-7xl mx-auto px-2 sm:px-6 mt-2 mb-1" data-aos="fade-up" data-aos-delay="60">
+    <div class="flex gap-1 mb-4 border-b border-sky-100">
+      <button class="tab-btn active" data-tab="selling">Đang bán <span class="ml-2 bg-white/80 text-sky-400 px-2 py-0.5 rounded-lg text-xs font-semibold">88</span></button>
+      <button class="tab-btn" data-tab="sold">Đã bán <span class="ml-2 bg-white/80 text-indigo-400 px-2 py-0.5 rounded-lg text-xs font-semibold">72</span></button>
+    </div>
+  </section>
+
+  <!-- Products Grid -->
+  <section class="max-w-7xl mx-auto px-2 sm:px-6 mb-14 relative z-10">
+    <!-- Đang bán -->
+    <div id="tab-selling" class="tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
+
+      <!-- Card 1 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Mới</span>
+        <img src="https://picsum.photos/id/100/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">S22 ULTRA - Đỏ Rượu Vang</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">12.900.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 2 phút trước</div>
+      </div>
+      <!-- Card 2 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/101/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Sony Xperia 1 Mark 2</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">9.490.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 5 phút trước</div>
+      </div>
+      <!-- Card 3 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/102/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 Plus</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">4.800.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 10 phút trước</div>
+      </div>
+      <!-- Card 4 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Mới</span>
+        <img src="https://picsum.photos/id/103/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 5G</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">8.990.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 15 phút trước</div>
+      </div>
+      <!-- Card 5 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/104/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">iPhone 12 Pro Max</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">16.500.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 20 phút trước</div>
+      </div>
+      <!-- Card 6 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Mới</span>
+        <img src="https://picsum.photos/id/105/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Google Pixel 6 Pro</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">10.200.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 30 phút trước</div>
+      </div>
+      <!-- Card 7 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/106/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">iPhone 13 Mini</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">12.000.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 40 phút trước</div>
+      </div>
+      <!-- Card 8 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/107/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Samsung Galaxy Note 20 Ultra</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">13.900.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 1 giờ trước</div>
+      </div>
+      <!-- Card 9 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Mới</span>
+        <img src="https://picsum.photos/id/108/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Sony Xperia 10 III</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">6.800.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 2 giờ trước</div>
+      </div>
+      <!-- Card 10 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/109/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">iPhone 11 Pro 64GB</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">8.500.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 3 giờ trước</div>
+      </div>
+      <!-- Card 11 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Mới</span>
+        <img src="https://picsum.photos/id/110/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Samsung S20 FE 5G</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">7.300.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 5 giờ trước</div>
+      </div>
+      <!-- Card 12 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag">Còn hàng</span>
+        <img src="https://picsum.photos/id/111/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">iPhone XR 64GB</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">5.100.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 8 giờ trước</div>
+      </div>
+    </div>
+    <!-- Đã bán -->
+    <div id="tab-sold" class="tab-content grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 hidden">
+      <!-- Card 1 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag sold">Đã bán</span>
+        <img src="https://picsum.photos/id/121/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Samsung S22 5G Mới 99%</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">6.490.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 2 ngày trước</div>
+      </div>
+      <!-- Card 2 -->
+      <div class="product-card glass glass-hover p-5 rounded-2xl shadow-md transition-all relative">
+        <span class="tag sold">Đã bán</span>
+        <img src="https://picsum.photos/id/122/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <button class="fav-btn" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+        <div class="font-semibold text-gray-800 truncate">Sony Xperia 5 IV</div>
+        <div class="text-sky-500 font-bold mt-1 text-lg">8.490.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-clock"></i> 3 ngày trước</div>
+      </div>
+      <!-- More cards... -->
+      <!-- ... -->
+    </div>
+    <div class="flex justify-center mt-10" data-aos="fade-up" data-aos-delay="120">
+      <button class="glass px-8 py-3 rounded-xl font-bold text-sky-500 border border-sky-200 hover:bg-sky-50 transition-all shadow">Xem thêm</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <!-- ...footer code unchanged... -->
+
+  <footer class="w-full footer-shadow bg-white/95 mt-16 border-t border-sky-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10 py-10 rounded-none md:rounded-3xl grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <span class="gradient-title font-extrabold text-2xl tracking-tight">ReBuy</span>
+        <p class="mt-3 text-sm font-medium text-gray-400">
+          Nền tảng mua bán đồ cũ chất lượng cao cho sinh viên, dân văn phòng, người thuê trọ.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <a href="#" class="social-round" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Messenger"><i class="ph ph-messenger-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Danh mục</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Xe cộ</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điện thoại</a></li>
+          <li><a href="#" class="hover:text-sky-500">Đồ điện tử</a></li>
+          <li><a href="#" class="hover:text-sky-500">Nội thất</a></li>
+          <li><a href="#" class="hover:text-sky-500">Thời trang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ khách hàng</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Trung tâm trợ giúp</a></li>
+          <li><a href="#" class="hover:text-sky-500">An toàn & bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Liên hệ hỗ trợ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Về ReBuy</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Giới thiệu</a></li>
+          <li><a href="#" class="hover:text-sky-500">Chính sách bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điều khoản sử dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+      © 2024 ReBuy. Made for the community. | Liên hệ: support@rebuy.vn
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({duration:900,once:true});
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.onclick = function() {
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.add('hidden'));
+        document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.remove('hidden');
+      }
+    });
+
+    // Follow button
+    document.getElementById('followBtn').onclick = function() {
+      this.classList.toggle('active');
+      this.innerHTML = this.classList.contains('active') ? `<i class="ph ph-heart-fill"></i> Đã theo dõi` : `<i class="ph ph-heart"></i> Theo dõi`;
+    };
+
+    // Yêu thích sản phẩm
+    document.querySelectorAll('.fav-btn').forEach(btn=>{
+      btn.onclick=function(){btn.classList.toggle('active');}
+    });
+  </script>
+</body>
+</html>
