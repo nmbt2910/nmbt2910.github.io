@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Danh sách điện thoại mới đăng – ReBuy</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <!-- Tippy.js Tooltip -->
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <!-- Ripple Button -->
+  <script src="https://unpkg.com/@material/ripple@13.0.0/dist/mdc.ripple.min.js"></script>
+  <style>
+    html,body {
+      font-family:'Inter',sans-serif;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      min-height: 100vh;
+    }
+    body {
+      position: relative;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position:fixed;
+      inset:0;
+      z-index:0;
+      background-image:url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode:overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    .glass{
+      background:rgba(255,255,255,0.94);
+      box-shadow:0 4px 28px 0 rgba(17,56,90,0.11),0 2px 15px 0 rgba(80,120,200,0.07);
+      backdrop-filter:blur(14px);
+      border-radius:1.7rem;
+      border:1.2px solid rgba(202,228,248,0.13);
+    }
+    .glass-hover:hover{
+      box-shadow:0 8px 38px 0 rgba(72,139,255,0.14),0 4px 18px 0 rgba(80,120,200,0.13);
+      transform:translateY(-5px) scale(1.04);
+    }
+    .btn-main{box-shadow:0 2px 10px 0 rgba(56,189,248,0.09);}
+    .gradient-title {
+      background:linear-gradient(90deg,#38bdf8 0%,#6366f1 60%,#fbbf24 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-fill-color:transparent;
+    }
+    .fav-btn{
+      background:#e0f2fe;border-radius:50%;
+      box-shadow:0 2px 8px 0 rgba(56,189,248,0.14);
+      width:38px;height:38px;display:flex;align-items:center;justify-content:center;transition:all 0.13s;
+    }
+    .fav-btn.active,.fav-btn:hover{
+      background:linear-gradient(135deg,#38bdf8 60%,#6366f1 100%);
+      color:#fff;transform:scale(1.11);
+    }
+    .carousel-track::-webkit-scrollbar{height:8px;background:transparent;}
+    .carousel-track::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#38bdf8 0%,#6366f1 80%);border-radius:9999px;min-width:60px;transition:background 0.3s;}
+    .carousel-track{scrollbar-color:#38bdf8 #e0f2fe;scrollbar-width:thin;}
+    .carousel-track:active::-webkit-scrollbar-thumb,.carousel-track:focus::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#6366f1 0%,#38bdf8 80%);}
+    .seller-info{display:flex;align-items:center;gap:0.8rem;margin-top:0.7rem;}
+    .seller-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2.2px solid #e0f2fe;background:#fff;}
+    .stars{display:inline-flex;align-items:center;gap:1.5px;font-size:1.16em;color:#fbbf24;}
+    .sold-count{font-size:0.97em;color:#6366f1;font-weight:600;margin-left:0.8em;}
+    @media(max-width:900px){.glass{border-radius:1.1rem;}}
+    @media(max-width:768px){
+      .seller-info{flex-direction:column;align-items:flex-start;gap:0.3rem;}
+    }
+    /* Custom Filter Chip - style giống ảnh */
+    .filter-chip {
+      display: flex;
+      align-items: center;
+      font-size: 1.08rem;
+      font-weight: 700;
+      padding: 0.8rem 1.5rem 0.8rem 1.2rem;
+      border-radius: 1.1em;
+      border: 1.6px solid #bae6fd;
+      color: #0ea5e9;
+      background: #fff;
+      transition: all 0.17s;
+      box-shadow: 0 2px 8px 0 rgba(56,189,248,0.02);
+      gap: 0.85em;
+      margin-right: 0.7rem;
+      outline: none;
+    }
+    .filter-chip:focus {border-color: #38bdf8;}
+    .filter-chip--active {
+      color: #0ea5e9;
+      border: 2.1px solid #38bdf8;
+      background: #fff;
+      box-shadow: 0 3px 12px 0 rgba(56,189,248,0.06);
+    }
+    .filter-chip .ph {font-size: 1.3em;}
+    .filter-chip--inactive {
+      color: #334155;
+      border: 1.6px solid #bae6fd;
+      background: #fff;
+      font-weight: 700;
+    }
+    .filter-chip:last-child {margin-right: 0;}
+    .filter-chip--active:focus {border-color: #1e90f5;}
+    .filter-chip:hover:not(.filter-chip--active) {
+      background: #f0fafd;
+      border-color: #38bdf8;
+      color: #0ea5e9;
+    }
+    @media (max-width: 640px) {
+      .filter-chip {width:100%;margin-bottom:0.3rem;}
+      .filter-chip:last-child {margin-bottom:0;}
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#f2f6fa] relative">
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+  <main class="max-w-7xl mx-auto px-2 sm:px-6 pt-6 pb-12 relative z-10">
+    <!-- Tiêu đề -->
+    <div class="flex flex-wrap items-center gap-4 mb-5" data-aos="fade-up">
+      <i class="ph ph-device-mobile gradient-title text-3xl"></i>
+      <h1 class="font-extrabold text-2xl md:text-3xl gradient-title">Điện thoại mới đăng gần đây</h1>
+    </div>
+    <!-- Lọc & Sắp xếp - style giống hình -->
+    <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-6" data-aos="fade-up" data-aos-delay="50">
+      <button class="filter-chip filter-chip--active" id="allBtn"><i class="ph ph-list-bold"></i> Tất cả</button>
+      <button class="filter-chip filter-chip--inactive" id="newestBtn"><i class="ph ph-clock"></i> Mới đăng</button>
+      <button class="filter-chip filter-chip--inactive" id="iphoneBtn"><i class="ph ph-apple-logo"></i> iPhone</button>
+      <button class="filter-chip filter-chip--inactive" id="androidBtn"><i class="ph ph-android-logo"></i> Android</button>
+      <button class="filter-chip filter-chip--inactive" id="brandBtn" data-tippy-content="Chọn hãng"><i class="ph ph-buildings"></i> Hãng</button>
+      <button class="filter-chip filter-chip--inactive" id="priceBtn" data-tippy-content="Chọn khoảng giá"><i class="ph ph-currency-circle-dollar"></i> Giá</button>
+      <button class="filter-chip filter-chip--inactive" id="advanceBtn"><i class="ph ph-sliders-horizontal"></i> Lọc nâng cao</button>
+    </div>
+    <!-- Dropdown bộ lọc (giả lập popup, có thể nâng cấp JS động) -->
+    <div class="relative z-50">
+      <div id="dropdown-price" class="filter-dropdown absolute bg-white glass shadow-lg rounded-xl p-5 top-0 left-0 hidden">
+        <div class="mb-3 font-semibold text-sky-700">Chọn khoảng giá</div>
+        <div class="flex items-center gap-2 mb-2">
+          <input type="range" min="0" max="50" value="5" class="price-range w-44" id="rangeMin"/>
+          <span id="rangeMinVal" class="font-bold text-sky-500">500.000đ</span>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <input type="range" min="1" max="100" value="80" class="price-range w-44" id="rangeMax"/>
+          <span id="rangeMaxVal" class="font-bold text-sky-700">8.000.000đ</span>
+        </div>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-xl font-semibold shadow hover:scale-105 transition mt-3">Áp dụng</button>
+      </div>
+    </div>
+    <!-- Lọc loại nhà bán hàng -->
+    <div class="flex flex-wrap gap-2 md:gap-3 mb-7 justify-end" data-aos="fade-up" data-aos-delay="70">
+      <button class="type-btn active" id="btnTatCa">Tất cả</button>
+      <button class="type-btn" id="btnCaNhan">Cá nhân</button>
+      <button class="type-btn" id="btnBanChuyen">Bán chuyên</button>
+    </div>
+    <!-- Danh sách tin đăng (20 card) -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-7" data-aos="fade-up" data-aos-delay="90">
+      <!-- CARD SẢN PHẨM (copy mẫu, sửa dữ liệu đa dạng) -->
+      <!-- 1 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/100/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone 13 ProMax 128GB</div>
+          <div class="text-sky-500 font-bold mt-1">13.600.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Bình Thạnh</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 4 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/511/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Trần Hùng</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 21</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 2 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/101/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Samsung S23 Ultra 256GB</div>
+          <div class="text-sky-500 font-bold mt-1">16.900.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 3</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 giờ trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/512/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Thuý Vy</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 3 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/102/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone 14 Pro 256GB</div>
+          <div class="text-sky-500 font-bold mt-1">19.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 7</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 6 giờ trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/513/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Ngô Quốc</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 11</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 4 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/103/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">OPPO Reno8 5G</div>
+          <div class="text-sky-500 font-bold mt-1">8.900.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Tân Bình</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 2 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/514/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Lê Đức</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 5 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/104/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Xiaomi Redmi Note 12</div>
+          <div class="text-sky-500 font-bold mt-1">4.250.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 10</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 tuần trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/515/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Hoàng Hà</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 6 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/105/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Realme 10 Pro Plus</div>
+          <div class="text-sky-500 font-bold mt-1">7.800.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> TP. Hà Nội</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 2 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/516/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Nguyễn Văn A</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 7 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/106/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Vsmart Joy 4</div>
+          <div class="text-sky-500 font-bold mt-1">2.000.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 5</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 3 giờ trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/517/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Bùi Minh</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 8 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/107/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone 12 Mini</div>
+          <div class="text-sky-500 font-bold mt-1">8.900.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 9</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 10 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/518/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Phạm Trang</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 9 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/108/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone X 64GB</div>
+          <div class="text-sky-500 font-bold mt-1">3.200.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 11</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 23 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/519/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Ngọc Hiệp</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 13</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 10 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/109/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Samsung Galaxy A53</div>
+          <div class="text-sky-500 font-bold mt-1">5.700.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Tân Phú</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/520/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Hà Linh</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 11 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/110/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone 14 ProMax 256GB</div>
+          <div class="text-sky-500 font-bold mt-1">18.600.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> TP. Hồ Chí Minh</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 30 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/521/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Nguyễn Thảo</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 10</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 12 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/111/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Vivo V23e</div>
+          <div class="text-sky-500 font-bold mt-1">6.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 2</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 2 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/522/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Trọng Nhân</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 13 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/112/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Nokia G50</div>
+          <div class="text-sky-500 font-bold mt-1">3.000.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 4 giờ trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/523/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Quốc Việt</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 14 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/113/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">POCO X5 Pro</div>
+          <div class="text-sky-500 font-bold mt-1">7.200.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Bình Thạnh</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 5 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/524/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Tú Quyên</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 15 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/114/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone 11 64GB</div>
+          <div class="text-sky-500 font-bold mt-1">7.000.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 8</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 14 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/525/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Vũ Thắng</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 16 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/115/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Google Pixel 6a</div>
+          <div class="text-sky-500 font-bold mt-1">6.900.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 3</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 ngày trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/526/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Lê Hùng</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 17 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/116/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone SE (2022)</div>
+          <div class="text-sky-500 font-bold mt-1">5.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> TP. Hà Nội</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 tuần trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/527/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Phan Minh</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 18 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/117/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Redmi Note 11</div>
+          <div class="text-sky-500 font-bold mt-1">3.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 6</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 2 tuần trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/528/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Nguyễn Hậu</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 19 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/118/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">iPhone XR 128GB</div>
+          <div class="text-sky-500 font-bold mt-1">4.800.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 7</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 13 phút trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/529/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Trần Lộc</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 9</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <!-- 20 -->
+      <div class="glass glass-hover p-5 rounded-2xl shadow-md transition-all flex flex-col md:flex-row gap-4 relative">
+        <img src="https://picsum.photos/id/119/160/120" alt="item" class="rounded-xl object-cover w-[120px] h-[90px] md:w-[160px] md:h-[120px]" />
+        <div class="flex-1 flex flex-col">
+          <div class="font-semibold text-gray-800 text-lg truncate">Samsung A13 128GB</div>
+          <div class="text-sky-500 font-bold mt-1">3.200.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 12</div>
+          <div class="text-xs text-gray-400 mt-0.5 flex items-center gap-1"><i class="ph ph-clock"></i> 1 giờ trước</div>
+          <div class="seller-info">
+            <img src="https://picsum.photos/id/530/38/38" alt="avatar" class="seller-avatar" />
+            <div>
+              <div class="font-semibold text-gray-700 text-sm">Hồ Thịnh</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="stars">
+                  <i class="ph ph-star-fill"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                  <i class="ph ph-star"></i>
+                </span>
+                <span class="sold-count">Đã bán 5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="fav-btn absolute top-4 right-4" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+    </section>
+    <!-- Phân trang -->
+    <div class="flex justify-center mt-10" data-aos="fade-up" data-aos-delay="120">
+      <nav class="flex items-center gap-2">
+        <button class="filter-chip px-3 py-2"><i class="ph ph-caret-left"></i></button>
+        <button class="filter-chip filter-chip--active px-4 py-2">1</button>
+        <button class="filter-chip filter-chip--inactive px-4 py-2">2</button>
+        <button class="filter-chip filter-chip--inactive px-4 py-2">3</button>
+        <span class="px-2 text-gray-400">...</span>
+        <button class="filter-chip filter-chip--inactive px-4 py-2">7</button>
+        <button class="filter-chip px-3 py-2"><i class="ph ph-caret-right"></i></button>
+      </nav>
+    </div>
+    <!-- Slide gợi ý tin nổi bật -->
+    <div class="mt-14" data-aos="fade-up" data-aos-delay="150">
+      <h2 class="font-bold text-xl text-gray-800 mb-3 flex items-center gap-2">
+        <i class="ph ph-fire text-orange-400"></i> Có thể bạn sẽ thích
+      </h2>
+      <div class="overflow-x-auto flex gap-5 pb-2 pt-1 carousel-track" tabindex="0">
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/130/220/130" alt="Điện thoại hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <div class="font-semibold text-gray-800 truncate">iPhone 14 Pro Max</div>
+          <div class="text-sky-500 font-bold mt-1">16.900.000₫</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/131/220/130" alt="Laptop hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <div class="font-semibold text-gray-800 truncate">MacBook Pro M2</div>
+          <div class="text-sky-500 font-bold mt-1">36.000.000₫</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/132/220/130" alt="Tablet hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <div class="font-semibold text-gray-800 truncate">iPad Pro 2022</div>
+          <div class="text-sky-500 font-bold mt-1">18.800.000₫</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/133/220/130" alt="Tai nghe hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <div class="font-semibold text-gray-800 truncate">AirPods Pro 2</div>
+          <div class="text-sky-500 font-bold mt-1">3.200.000₫</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    AOS.init({duration:900,once:true});
+    tippy('[data-tippy-content]', {theme: 'light-border', animation: 'shift-toward', delay:[0,80]});
+    // Filter chip buttons active state (chỉ cho nhóm filter-chip)
+    document.querySelectorAll('.filter-chip').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        document.querySelectorAll('.filter-chip').forEach(b=>{
+          b.classList.remove('filter-chip--active');
+          b.classList.add('filter-chip--inactive');
+        });
+        btn.classList.add('filter-chip--active');
+        btn.classList.remove('filter-chip--inactive');
+      });
+      if(window.mdc) mdc.ripple.MDCRipple.attachTo(btn);
+    });
+    // Lọc loại nhà bán hàng
+    document.getElementById('btnTatCa').onclick=function(){
+      this.classList.add('active');
+      document.getElementById('btnCaNhan').classList.remove('active');
+      document.getElementById('btnBanChuyen').classList.remove('active');
+    }
+    document.getElementById('btnCaNhan').onclick=function(){
+      this.classList.add('active');
+      document.getElementById('btnTatCa').classList.remove('active');
+      document.getElementById('btnBanChuyen').classList.remove('active');
+    }
+    document.getElementById('btnBanChuyen').onclick=function(){
+      this.classList.add('active');
+      document.getElementById('btnTatCa').classList.remove('active');
+      document.getElementById('btnCaNhan').classList.remove('active');
+    }
+    // Dropdown giả lập cho filter giá
+    const priceBtn=document.getElementById('priceBtn');
+    const dropdown=document.getElementById('dropdown-price');
+    priceBtn.onclick=function(e){
+      e.stopPropagation();
+      dropdown.classList.toggle('hidden');
+      const rect=priceBtn.getBoundingClientRect();
+      dropdown.style.top=(rect.bottom+8+window.scrollY)+'px';
+      dropdown.style.left=(rect.left)+'px';
+    };
+    document.body.onclick=function(){dropdown.classList.add('hidden');}
+    dropdown.onclick=function(e){e.stopPropagation();}
+    // Cập nhật giá range
+    document.getElementById('rangeMin').oninput=function(){
+      document.getElementById('rangeMinVal').textContent=(this.value*100000).toLocaleString('vi-VN')+'đ';
+    }
+    document.getElementById('rangeMax').oninput=function(){
+      document.getElementById('rangeMaxVal').textContent=(this.value*100000).toLocaleString('vi-VN')+'đ';
+    }
+    // Nút yêu thích
+    document.querySelectorAll('.fav-btn').forEach(btn=>{
+      btn.onclick=function(){btn.classList.toggle('active');}
+    });
+  </script>
+</body>
+</html>
