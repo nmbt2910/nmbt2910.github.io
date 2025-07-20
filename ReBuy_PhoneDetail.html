@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Chi tiết tin đăng - Samsung Galaxy S21 FE | ReBuy</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <!-- SwiperJS for slider -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <style>
+    html,body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .glass-hover:hover { 
+      box-shadow: 0 8px 32px 0 rgba(72, 139, 255, 0.09), 0 2px 12px 0 rgba(80,120,200,0.12); 
+      transform: translateY(-4px) scale(1.04);
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .swiper-pagination-bullet {
+      background: #38bdf8;
+      opacity: 0.6;
+    }
+    .swiper-pagination-bullet-active {
+      background: #6366f1;
+      opacity: 1;
+    }
+    .badge {
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 3px 11px;
+      border-radius: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .badge-green { background: #d1fae5; color: #059669;}
+    .badge-yellow { background: #fef9c3; color: #eab308;}
+    .badge-blue  { background: #e0f2fe; color: #0ea5e9;}
+    .badge-gray  { background: #e5e7eb; color: #6b7280;}
+    .badge-red   { background: #fee2e2; color: #dc2626;}
+    ::-webkit-scrollbar { height: 6px; width: 6px; background: transparent;}
+    ::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .carousel-track::-webkit-scrollbar {
+      height: 8px;
+      background: transparent;
+    }
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 80%);
+      border-radius: 9999px;
+      min-width: 60px;
+      transition: background 0.3s;
+    }
+    .carousel-track {
+      scrollbar-color: #38bdf8 #e0f2fe;
+      scrollbar-width: thin;
+    }
+    .carousel-track:active::-webkit-scrollbar-thumb,
+    .carousel-track:focus::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #6366f1 0%, #38bdf8 80%);
+    }
+    .seller-avatar {
+      box-shadow: 0 2px 18px #e0e7ef, -2px -2px 18px #fff;
+      border: 2.5px solid #e0f2fe;
+    }
+    .btn-main { box-shadow: 0 2px 10px 0 rgba(56,189,248,0.08);}
+    .glass-btn:active { transform: scale(0.97);}
+    .card-shadow { box-shadow: 0 4px 24px 0 rgba(56,189,248,0.07);}
+    .review-star { color: #eab308; font-size: 1.32rem;}
+    .tag {
+      background: #f3f4f6;
+      color: #6366f1;
+      border-radius: 0.8rem;
+      padding: 3px 12px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+    /* Heart Save Button Animation */
+    .heart-btn .ph-heart {
+      transition: color 0.22s cubic-bezier(.61,.09,.72,.99), filter 0.22s;
+      color: #cbd5e1;
+      filter: drop-shadow(0 1px 4px #e0f2fe);
+    }
+    .heart-btn.active .ph-heart {
+      color: #f43f5e;
+      filter: drop-shadow(0 0 6px #fda4af);
+      animation: heartBeat 0.24s cubic-bezier(.61,.09,.72,.99);
+    }
+    @keyframes heartBeat {
+      0% { transform: scale(1);}
+      30% { transform: scale(1.28);}
+      70% { transform: scale(0.88);}
+      100% { transform: scale(1);}
+    }
+    /* Main Info Card standout */
+    .main-info-card {
+      border: 1.8px solid #bae6fd;
+      box-shadow: 0 8px 32px 0 rgba(56,189,248,0.13), 0 2px 12px 0 rgba(80,120,200,0.15);
+      background: rgba(255,255,255,0.98);
+      z-index: 2;
+      position: relative;
+    }
+    @media (max-width: 900px) {
+      .glass, .main-info-card { border-radius: 1.1rem;}
+    }
+    @media (max-width: 640px) {
+      .glass, .main-info-card { border-radius: 0.7rem;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <div class="noise"></div>
+  <main class="max-w-6xl mx-auto px-2 sm:px-6 pt-6 pb-20 relative z-10">
+    <!-- Tiêu đề & Đường dẫn -->
+    <nav class="text-base text-gray-400 mb-3 flex items-center gap-2 select-none" aria-label="breadcrumb">
+      <a href="#" class="hover:text-sky-500 transition">Trang chủ</a>
+      <span>/</span>
+      <a href="#" class="hover:text-sky-500 transition">Điện thoại</a>
+      <span>/</span>
+      <span class="text-gray-700 font-semibold truncate">Samsung Galaxy S21 FE bản USA 6|128GB Trả góp</span>
+    </nav>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-7 items-start">
+      <!-- Left: Slider & Info -->
+      <div class="col-span-2 flex flex-col gap-7">
+        <!-- Thông tin chính -->
+        <section class="main-info-card card-shadow p-6 flex flex-col gap-5" data-aos="fade-right">
+          <!-- Ảnh Slider -->
+          <div class="w-full">
+            <div class="swiper mainSwiper rounded-2xl overflow-hidden">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="https://picsum.photos/id/1010/600/400" alt="Samsung Galaxy S21 FE - 1" class="w-full h-[320px] object-cover rounded-2xl" loading="lazy"></div>
+                <div class="swiper-slide"><img src="https://picsum.photos/id/1016/600/400" alt="Samsung Galaxy S21 FE - 2" class="w-full h-[320px] object-cover rounded-2xl" loading="lazy"></div>
+                <div class="swiper-slide"><img src="https://picsum.photos/id/1026/600/400" alt="Samsung Galaxy S21 FE - 3" class="w-full h-[320px] object-cover rounded-2xl" loading="lazy"></div>
+                <div class="swiper-slide"><img src="https://picsum.photos/id/1012/600/400" alt="Samsung Galaxy S21 FE - 4" class="w-full h-[320px] object-cover rounded-2xl" loading="lazy"></div>
+                <div class="swiper-slide"><img src="https://picsum.photos/id/1020/600/400" alt="Samsung Galaxy S21 FE - 5" class="w-full h-[320px] object-cover rounded-2xl" loading="lazy"></div>
+              </div>
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-prev !text-sky-400"></div>
+              <div class="swiper-button-next !text-sky-400"></div>
+            </div>
+            <!-- thumbnail -->
+            <div class="flex gap-2 mt-3 select-none">
+              <img class="rounded-xl border-2 border-sky-200 cursor-pointer w-16 h-16 object-cover thumb-img" src="https://picsum.photos/id/1010/600/400" alt="thumb1"/>
+              <img class="rounded-xl border-2 border-transparent cursor-pointer w-16 h-16 object-cover thumb-img" src="https://picsum.photos/id/1016/600/400" alt="thumb2"/>
+              <img class="rounded-xl border-2 border-transparent cursor-pointer w-16 h-16 object-cover thumb-img" src="https://picsum.photos/id/1026/600/400" alt="thumb3"/>
+              <img class="rounded-xl border-2 border-transparent cursor-pointer w-16 h-16 object-cover thumb-img" src="https://picsum.photos/id/1012/600/400" alt="thumb4"/>
+              <img class="rounded-xl border-2 border-transparent cursor-pointer w-16 h-16 object-cover thumb-img" src="https://picsum.photos/id/1020/600/400" alt="thumb5"/>
+            </div>
+          </div>
+          <!-- Thông tin chính -->
+          <div class="mt-3 mb-2">
+            <h1 class="gradient-title font-extrabold text-2xl md:text-3xl mb-1 leading-tight">Samsung Galaxy S21 FE bản USA 6|128GB Trả góp</h1>
+            <div class="flex items-center gap-2 flex-wrap mb-2">
+              <span class="badge badge-green"><i class="ph ph-shield-check"></i> Còn bảo hành</span>
+              <span class="badge badge-blue">Đã sử dụng</span>
+              <span class="badge badge-yellow"><i class="ph ph-map-pin"></i> Q. Bình Thạnh, TP.HCM</span>
+              <span class="badge badge-gray"><i class="ph ph-calendar-blank"></i> Đăng 18 phút trước</span>
+            </div>
+            <div class="flex items-center gap-6 flex-wrap">
+              <span class="text-2xl font-extrabold text-sky-500">4.190.000₫</span>
+              <span class="tag">Trả góp 0%</span>
+              <span class="tag">Ship toàn quốc</span>
+              <span class="tag">Bao test 7 ngày</span>
+            </div>
+          </div>
+        </section>
+        <!-- Mô tả chi tiết -->
+        <section class="glass card-shadow p-6" data-aos="fade-up">
+          <h2 class="font-bold text-lg mb-2 text-gray-900">Mô tả chi tiết</h2>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1 mb-2">
+            <li>Samsung Galaxy S21 FE bản USA, RAM 6GB, ROM 128GB.</li>
+            <li>Hình thức mới 98%, bảo hành 6 tháng.</li>
+            <li>Hỗ trợ trả góp 0%, bao test 7 ngày, ship toàn quốc.</li>
+            <li>Máy nguyên zin, chưa sửa chữa, cam kết đúng mô tả.</li>
+            <li>Phụ kiện: Sạc, cáp, hộp đầy đủ.</li>
+          </ul>
+          <div class="flex items-center gap-3 text-sm text-gray-500 mt-1">
+            <i class="ph ph-storefront text-base"></i>
+            <span>Vio Store cam kết chỉ bán hàng nguyên bản</span>
+          </div>
+        </section>
+        <!-- Thông tin chi tiết -->
+        <section class="glass card-shadow p-6" data-aos="fade-up">
+          <h2 class="font-bold text-lg mb-2 text-gray-900">Thông tin chi tiết</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-3 text-gray-700 text-base">
+            <div><span class="font-semibold text-gray-500">Hãng:</span> Samsung</div>
+            <div><span class="font-semibold text-gray-500">Dòng máy:</span> Galaxy S21 FE</div>
+            <div><span class="font-semibold text-gray-500">Tình trạng:</span> Đã sử dụng</div>
+            <div><span class="font-semibold text-gray-500">Bảo hành:</span> 6 tháng</div>
+            <div><span class="font-semibold text-gray-500">Màu sắc:</span> Tím nhạt</div>
+            <div><span class="font-semibold text-gray-500">Dung lượng:</span> 128 GB</div>
+            <div><span class="font-semibold text-gray-500">Xuất xứ:</span> USA</div>
+            <div><span class="font-semibold text-gray-500">Phụ kiện:</span> Đủ hộp, sạc, cáp</div>
+            <div><span class="font-semibold text-gray-500">Tình trạng hộp:</span> Còn hộp</div>
+            <div><span class="font-semibold text-gray-500">Tính năng:</span> Có chống nước</div>
+          </div>
+        </section>
+      </div>
+      <!-- Right: Thông tin người bán & liên hệ -->
+      <aside class="glass card-shadow p-6 flex flex-col gap-5 sticky top-8 z-10" data-aos="fade-left">
+        <!-- Nút Lưu, Chia sẻ -->
+        <div class="flex justify-end gap-2">
+          <button class="glass-btn bg-white/80 border border-sky-100 rounded-full w-11 h-11 flex items-center justify-center hover:bg-sky-50 transition heart-btn" title="Lưu tin" aria-label="Lưu tin">
+            <i class="ph ph-heart text-2xl transition"></i>
+          </button>
+          <button class="glass-btn bg-white/80 border border-sky-100 rounded-full w-11 h-11 flex items-center justify-center hover:bg-sky-50 transition" title="Chia sẻ">
+            <i class="ph ph-share-network text-xl text-indigo-400"></i>
+          </button>
+        </div>
+        <!-- Người bán -->
+        <div class="flex items-center gap-4">
+          <img src="https://picsum.photos/id/1011/100/100" alt="avatar" class="w-16 h-16 rounded-full seller-avatar object-cover" />
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-base text-gray-900">Vio Store</span>
+              <span class="badge badge-green"><i class="ph ph-check-circle"></i> Đã xác thực</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1 text-sm text-gray-500">
+              <span class="review-star"><i class="ph ph-star-fill"></i></span>
+              <span>4.7</span>
+              <span class="text-gray-400">(365 đánh giá)</span>
+            </div>
+          </div>
+        </div>
+        <!-- Liên hệ + Chat -->
+        <div class="flex flex-col gap-3">
+          <a href="tel:096121xxxx" class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white text-lg font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition hover:scale-105 active:scale-95 shadow">
+            <i class="ph ph-phone-call text-xl"></i> Gọi ngay
+          </a>
+          <button class="glass-btn glass border border-sky-100 text-sky-700 font-semibold py-3 rounded-xl text-lg flex items-center justify-center gap-2 hover:bg-sky-50 transition">
+            <i class="ph ph-chat-text text-xl"></i> Nhắn tin
+          </button>
+        </div>
+        <div class="text-sm text-gray-500 flex items-center gap-2 mt-3">
+          <i class="ph ph-map-pin text-base"></i> Q. Bình Thạnh, TP.HCM
+        </div>
+        <div class="flex flex-col gap-2 mt-5">
+          <a href="#" class="glass-btn bg-white/60 border border-sky-100 rounded-lg py-2 px-4 text-sky-500 font-bold flex items-center gap-2 hover:bg-sky-50 transition text-base"><i class="ph ph-storefront"></i> Xem cửa hàng</a>
+          <a href="#" class="glass-btn bg-white/60 border border-sky-100 rounded-lg py-2 px-4 text-sky-500 font-bold flex items-center gap-2 hover:bg-sky-50 transition text-base"><i class="ph ph-list"></i> Xem các tin khác</a>
+        </div>
+      </aside>
+    </div>
+    <!-- Bình luận -->
+    <section class="glass card-shadow p-6 my-10 mt-14" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-5">
+        <i class="ph ph-chat-circle-dots text-2xl text-sky-400"></i>
+        <h2 class="font-bold text-lg text-gray-900">Bình luận & Tư vấn</h2>
+      </div>
+      <form class="flex gap-3 items-center mb-4">
+        <input type="text" class="glass flex-1 px-5 py-3 rounded-xl outline-none border border-sky-100 focus:ring-2 focus:ring-sky-200 transition text-base text-gray-700" placeholder="Đặt câu hỏi về sản phẩm..." aria-label="Nhập bình luận"/>
+        <button type="submit" class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white font-bold px-7 py-3 rounded-xl shadow hover:scale-105 transition">Gửi</button>
+      </form>
+      <div class="text-sm text-gray-400 italic">Chưa có bình luận nào. Hãy là người đầu tiên bình luận cho người bán!</div>
+    </section>
+    <!-- Tin đăng khác của cửa hàng -->
+    <section class="mt-10" data-aos="fade-up">
+      <h2 class="font-bold text-xl text-gray-900 mb-4">Tin đăng khác của <span class="text-sky-500">Vio Store</span></h2>
+      <div class="carousel-track flex overflow-x-auto gap-5 pb-2">
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1032/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Mới</span>
+          <div class="font-semibold text-gray-800 truncate">Sony Xperia 1 6GB 64GB New - Bản Quốc Tế</div>
+          <div class="text-sky-500 font-bold mt-1">2.590.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1041/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Trả góp</span>
+          <div class="font-semibold text-gray-800 truncate">OnePlus Ace 5 Snap 8 Gen</div>
+          <div class="text-sky-500 font-bold mt-1">7.090.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1048/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Mới</span>
+          <div class="font-semibold text-gray-800 truncate">OPPO Reno 12 12GB 512GB</div>
+          <div class="text-sky-500 font-bold mt-1">6.990.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1051/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Hot</span>
+          <div class="font-semibold text-gray-800 truncate">Vivo X80 5G Dimensity</div>
+          <div class="text-sky-500 font-bold mt-1">4.490.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1038/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Trả góp</span>
+          <div class="font-semibold text-gray-800 truncate">OPPO Reno8 Pro 5G</div>
+          <div class="text-sky-500 font-bold mt-1">3.290.000₫</div>
+        </div>
+      </div>
+    </section>
+    <!-- Tin đăng tương tự -->
+    <section class="mt-10" data-aos="fade-up">
+      <h2 class="font-bold text-xl text-gray-900 mb-4">Tin đăng tương tự</h2>
+      <div class="carousel-track flex overflow-x-auto gap-5 pb-2">
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1022/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-green">Còn bảo hành</span>
+          <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 5G 6|128GB</div>
+          <div class="text-sky-500 font-bold mt-1">4.500.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1030/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-blue">Ship nhanh</span>
+          <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 FE</div>
+          <div class="text-sky-500 font-bold mt-1">5.200.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1036/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-yellow">Trả góp</span>
+          <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 5G</div>
+          <div class="text-sky-500 font-bold mt-1">4.700.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1042/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-green">Bảo hành 12T</span>
+          <div class="font-semibold text-gray-800 truncate">Samsung S21 FE 128GB</div>
+          <div class="text-sky-500 font-bold mt-1">4.500.000₫</div>
+        </div>
+        <div class="min-w-[210px] glass glass-hover card-shadow p-3 rounded-xl flex-shrink-0 transition-all relative">
+          <img src="https://picsum.photos/id/1050/220/140" alt="item" class="rounded-lg mb-2 object-cover w-full h-[110px]" />
+          <span class="absolute top-2 left-2 badge badge-red">Đã qua sử dụng</span>
+          <div class="font-semibold text-gray-800 truncate">Samsung Galaxy S21 FE Mỹ</div>
+          <div class="text-sky-500 font-bold mt-1">3.500.000₫</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Script -->
+  <script>
+    AOS.init({ duration: 800, once: true });
+    // Swiper slider
+    var mainSwiper = new Swiper('.mainSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: true,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      speed: 450,
+      effect: 'slide',
+    });
+    // thumbnail click
+    const thumbs = document.querySelectorAll('.thumb-img');
+    thumbs.forEach((thumb, idx) => {
+      thumb.addEventListener('click', () => {
+        mainSwiper.slideToLoop(idx, 350, false);
+        thumbs.forEach(t => t.classList.remove('border-sky-200'));
+        thumb.classList.add('border-sky-200');
+      });
+    });
+    // Bình luận
+    document.querySelector("form").onsubmit = e => {
+      e.preventDefault();
+      alert("Bình luận đã được gửi!");
+    };
+    // Heart save
+    document.querySelectorAll('.heart-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
