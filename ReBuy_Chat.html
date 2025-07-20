@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ReBuy - Nhắn Tin Trực Tiếp</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html, body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      min-height: 100vh;
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .glass-hover:hover {
+      box-shadow: 0 8px 32px 0 rgba(72, 139, 255, 0.09), 0 2px 12px 0 rgba(80,120,200,0.12); 
+      transform: translateY(-4px) scale(1.04);
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.08;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .scrollbar::-webkit-scrollbar { width: 7px; background: transparent;}
+    .scrollbar::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .chat-input::-webkit-scrollbar { height: 6px; background: #f2f6fa;}
+    .chat-input::-webkit-scrollbar-thumb { background: #e0f2fe; border-radius: 3px;}
+    .chat-bubble {
+      position: relative;
+      display: inline-block;
+      max-width: 90%;
+      padding: 0.8rem 1.1rem;
+      border-radius: 1.3rem;
+      background: #e0f2fe;
+      color: #164e63;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      box-shadow: 0 2px 12px 0 rgba(56,189,248,0.04);
+      word-break: break-word;
+    }
+    .chat-bubble.me {
+      background: linear-gradient(90deg, #38bdf8 60%, #6366f1 100%);
+      color: #fff;
+      margin-left: auto;
+      box-shadow: 0 2px 16px 0 rgba(99,102,241,0.11);
+    }
+    .chat-bubble img, .chat-bubble video {
+      max-width: 220px;
+      border-radius: 1rem;
+      margin-top: 0.4rem;
+    }
+    .bubble-info {
+      font-size: 0.87rem;
+      color: #475569;
+      margin-bottom: 0.15rem;
+      font-weight: 500;
+    }
+    .chat-bubble.file {
+      background: #fffbe6;
+      color: #b45309;
+      border: 1px solid #fbbf24;
+    }
+    .chat-bubble.location {
+      background: #f0fdfa;
+      color: #059669;
+      border: 1px solid #34d399;
+    }
+    .chat-time {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 0.1rem;
+      margin-left: 0.2rem;
+    }
+    .chat-suggestion {
+      background: #e0f2fe;
+      color: #0ea5e9;
+      font-weight: 600;
+      border-radius: 1rem;
+      padding: 0.4rem 1.1rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.45rem;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.15s;
+    }
+    .chat-suggestion:hover {
+      background: #bae6fd;
+    }
+    .contact-btn {
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.6rem 1.1rem;
+      transition: transform 0.14s, box-shadow 0.14s;
+      box-shadow: 0 2px 10px 0 rgba(56,189,248,0.09);
+      background: #e0f2fe;
+      color: #0ea5e9;
+      margin-right: 0.6rem;
+    }
+    .contact-btn:hover {
+      background: linear-gradient(90deg, #38bdf8 60%, #6366f1 100%);
+      color: #fff;
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px 0 rgba(56,189,248,0.19);
+    }
+    .contact-btn.red {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1.2px solid #fecaca;
+    }
+    .contact-btn.red:hover {
+      background: #f87171;
+      color: #fff;
+    }
+    .product-badge {
+      background: #38bdf8;
+      color: #fff;
+      font-size: 0.79rem;
+      font-weight: 700;
+      border-radius: 0.8rem;
+      padding: 0.2rem 0.85rem;
+      margin-left: 0.3rem;
+    }
+    .product-badge.expired {
+      background: #d1d5db;
+      color: #b91c1c;
+    }
+    .avatar-online {
+      box-shadow: 0 0 0 2.5px #fff, 0 0 0 5px #34d399;
+      border-radius: 50%;
+    }
+    .avatar-offline {
+      box-shadow: 0 0 0 2.5px #fff, 0 0 0 5px #d1d5db;
+      border-radius: 50%;
+      filter: grayscale(1);
+    }
+    @media (max-width: 1024px) {
+      .chat-layout { flex-direction: column !important; }
+      .chat-sidebar { width: 100% !important; min-width: 0 !important; border-radius: 1.2rem 1.2rem 0 0 !important;}
+      .chat-main { width: 100% !important; min-width: 0 !important; border-radius: 0 0 1.2rem 1.2rem !important;}
+    }
+    @media (max-width: 700px) {
+      .chat-sidebar { display: none !important;}
+      .chat-main { width: 100vw !important;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+  <!-- Header -->
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50 flex items-center px-2 sm:px-8 py-2 lg:py-3">
+    <a href="#" class="flex items-center gap-2">
+      <span class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</span>
+    </a>
+    <span class="ml-3 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Chat</span>
+    <div class="flex-1"></div>
+    <a href="#" class="glass px-5 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+      <i class="ph ph-user text-xl"></i>
+      Hồ sơ
+    </a>
+  </header>
+  <!-- Main Layout -->
+  <main class="max-w-6xl mx-auto mt-8 mb-8 px-2 md:px-6 flex gap-8 chat-layout flex-row relative z-10">
+    <!-- Sidebar: Chat list -->
+    <aside class="chat-sidebar glass shadow-xl p-5 w-[330px] min-w-[280px] rounded-3xl flex flex-col gap-3 scrollbar overflow-y-auto">
+      <div class="mb-2 flex items-center">
+        <div class="font-bold text-lg text-gray-800 flex-1">Tin nhắn</div>
+        <button class="glass px-3 py-1 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 text-sm"><i class="ph ph-plus"></i> Tạo mới</button>
+      </div>
+      <!-- Search -->
+      <div class="relative mb-3">
+        <input type="text" placeholder="Tìm kiếm hội thoại..." class="w-full px-4 py-2 glass rounded-xl text-base border border-sky-100 outline-none bg-white/70 focus:ring-2 focus:ring-sky-200 transition"/>
+        <i class="ph ph-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-sky-400"></i>
+      </div>
+      <!-- List of chat -->
+      <div class="flex flex-col gap-1">
+        <!-- User 1 -->
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-sky-50 transition cursor-pointer group glass-hover" style="margin-bottom:4px;" data-active="true">
+          <img src="https://picsum.photos/id/1005/44/44" alt="Trần Duy" class="w-11 h-11 object-cover rounded-full avatar-online"/>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-800">Trần Duy</span>
+              <span class="product-badge">Tin còn hạn</span>
+            </div>
+            <div class="text-gray-500 text-xs truncate">Bạn: Gửi cho mình định vị nhé</div>
+          </div>
+          <div class="ml-2 flex flex-col items-end">
+            <span class="text-xs text-gray-400">1 phút</span>
+            <span class="w-2 h-2 bg-green-400 rounded-full mt-1"></span>
+          </div>
+        </div>
+        <!-- User 2 -->
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-sky-50 transition cursor-pointer group glass-hover">
+          <img src="https://picsum.photos/id/1012/44/44" alt="Ngọc Hân" class="w-11 h-11 object-cover rounded-full avatar-offline"/>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-800">Ngọc Hân</span>
+              <span class="product-badge expired">Hết hạn</span>
+            </div>
+            <div class="text-gray-500 text-xs truncate">Bạn: Sản phẩm còn không?</div>
+          </div>
+          <div class="ml-2 flex flex-col items-end">
+            <span class="text-xs text-gray-400">5 phút</span>
+            <span class="w-2 h-2 bg-gray-400 rounded-full mt-1"></span>
+          </div>
+        </div>
+        <!-- User 3 -->
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-sky-50 transition cursor-pointer group glass-hover">
+          <img src="https://picsum.photos/id/1021/44/44" alt="Đăng Khoa" class="w-11 h-11 object-cover rounded-full avatar-online"/>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-800">Đăng Khoa</span>
+              <span class="product-badge">Tin còn hạn</span>
+            </div>
+            <div class="text-gray-500 text-xs truncate">Đang chờ bạn gửi số điện thoại</div>
+          </div>
+          <div class="ml-2 flex flex-col items-end">
+            <span class="text-xs text-gray-400">10 phút</span>
+            <span class="w-2 h-2 bg-green-400 rounded-full mt-1"></span>
+          </div>
+        </div>
+        <!-- User 4 -->
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-sky-50 transition cursor-pointer group glass-hover">
+          <img src="https://picsum.photos/id/1045/44/44" alt="Tracy" class="w-11 h-11 object-cover rounded-full avatar-offline"/>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-800">Tracy</span>
+              <span class="product-badge">Tin còn hạn</span>
+            </div>
+            <div class="text-gray-500 text-xs truncate">[Hình ảnh]</div>
+          </div>
+          <div class="ml-2 flex flex-col items-end">
+            <span class="text-xs text-gray-400">14 phút</span>
+            <span class="w-2 h-2 bg-gray-400 rounded-full mt-1"></span>
+          </div>
+        </div>
+        <!-- User 5 -->
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-sky-50 transition cursor-pointer group glass-hover">
+          <img src="https://picsum.photos/id/1062/44/44" alt="Nam Anh" class="w-11 h-11 object-cover rounded-full avatar-online"/>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-gray-800">Nam Anh</span>
+              <span class="product-badge">Tin còn hạn</span>
+            </div>
+            <div class="text-gray-500 text-xs truncate">Bạn đã gửi file PDF</div>
+          </div>
+          <div class="ml-2 flex flex-col items-end">
+            <span class="text-xs text-gray-400">1 giờ</span>
+            <span class="w-2 h-2 bg-green-400 rounded-full mt-1"></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Chat Main -->
+    <section class="chat-main glass shadow-xl rounded-3xl flex flex-col w-[calc(100%-330px)] min-w-[300px] relative overflow-hidden">
+      <!-- Chat Header -->
+      <div class="flex items-center justify-between p-6 pb-3 border-b border-sky-50 bg-white/85 z-20">
+        <div class="flex items-center gap-4">
+          <img src="https://picsum.photos/id/1005/48/48" alt="Trần Duy" class="w-12 h-12 object-cover rounded-full avatar-online"/>
+          <div>
+            <div class="font-bold text-lg text-gray-900 flex items-center gap-2">Trần Duy <span class="w-2 h-2 bg-green-400 rounded-full inline-block"></span></div>
+            <div class="text-xs text-gray-500">Hoạt động 1 phút trước</div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button class="contact-btn" id="btn-request-phone"><i class="ph ph-phone"></i> Yêu cầu SĐT</button>
+          <button class="contact-btn" id="btn-add-contact"><i class="ph ph-address-book"></i> Thêm liên hệ</button>
+          <button class="contact-btn red" id="btn-block"><i class="ph ph-user-x"></i> Chặn</button>
+        </div>
+      </div>
+      <!-- Product Info -->
+      <div class="flex items-center gap-4 bg-[#e0f2fe]/60 px-6 py-3 border-b border-sky-100 z-10">
+        <img src="https://picsum.photos/id/1016/80/60" alt="sp" class="rounded-xl object-cover w-[70px] h-[52px] border border-white/60" />
+        <div class="flex-1">
+          <div class="font-semibold text-gray-700 text-base flex items-center gap-2">Bàn làm việc hiện đại <span class="product-badge">Còn hạn</span></div>
+          <div class="text-sky-600 font-bold">2.200.000₫</div>
+        </div>
+        <div class="flex flex-col items-end">
+          <span class="text-xs text-gray-500">Còn 10 ngày đăng</span>
+        </div>
+      </div>
+      <!-- Chat History -->
+      <div class="flex-1 px-6 py-5 overflow-y-auto scrollbar bg-transparent" id="chatHistory" style="min-height:270px;">
+        <!-- Tin nhắn demo -->
+        <div class="flex items-end gap-3 mb-3">
+          <img src="https://picsum.photos/id/1005/36/36" class="w-9 h-9 rounded-full avatar-online" alt="user"/>
+          <div>
+            <div class="bubble-info">Trần Duy</div>
+            <div class="chat-bubble">Chào bạn! Sản phẩm này còn không?</div>
+            <div class="chat-time">10:01</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3 flex-row-reverse">
+          <img src="https://picsum.photos/id/1001/36/36" class="w-9 h-9 rounded-full" alt="me"/>
+          <div class="text-right">
+            <div class="bubble-info text-right">Bạn</div>
+            <div class="chat-bubble me">Chào bạn, sản phẩm còn nhé!</div>
+            <div class="chat-time">10:02</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3 flex-row-reverse">
+          <img src="https://picsum.photos/id/1001/36/36" class="w-9 h-9 rounded-full" alt="me"/>
+          <div class="text-right">
+            <div class="bubble-info text-right">Bạn</div>
+            <div class="chat-bubble me file flex items-center gap-2"><i class="ph ph-file-arrow-down text-xl"></i>Hợp đồng mua bán.pdf <a href="#" class="underline text-sky-500 ml-2">Tải xuống</a></div>
+            <div class="chat-time">10:02</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3">
+          <img src="https://picsum.photos/id/1005/36/36" class="w-9 h-9 rounded-full avatar-online" alt="user"/>
+          <div>
+            <div class="bubble-info">Trần Duy</div>
+            <div class="chat-bubble"><i class="ph ph-image text-lg"></i><br><img src="https://picsum.photos/id/1025/150/100" alt="ảnh"/></div>
+            <div class="chat-time">10:03</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3 flex-row-reverse">
+          <img src="https://picsum.photos/id/1001/36/36" class="w-9 h-9 rounded-full" alt="me"/>
+          <div class="text-right">
+            <div class="bubble-info text-right">Bạn</div>
+            <div class="chat-bubble me">Bạn gửi vị trí giúp mình nhé!</div>
+            <div class="chat-time">10:04</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3">
+          <img src="https://picsum.photos/id/1005/36/36" class="w-9 h-9 rounded-full avatar-online" alt="user"/>
+          <div>
+            <div class="bubble-info">Trần Duy</div>
+            <div class="chat-bubble location flex gap-2 items-center">
+              <i class="ph ph-map-pin text-xl text-green-500"></i>
+              <div>
+                <span class="block mb-1">Tôi đã gửi vị trí của mình</span>
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center=10.762622,106.660172&zoom=15&size=180x90&markers=color:red%7C10.762622,106.660172&key=AIzaSyDUMMY" class="rounded-lg border" alt="Map location"/>
+                <span class="block mt-1 text-xs text-green-700">10.7626, 106.6602</span>
+              </div>
+            </div>
+            <div class="chat-time">10:05</div>
+          </div>
+        </div>
+        <div class="flex items-end gap-3 mb-3 flex-row-reverse">
+          <img src="https://picsum.photos/id/1001/36/36" class="w-9 h-9 rounded-full" alt="me"/>
+          <div class="text-right">
+            <div class="bubble-info text-right">Bạn</div>
+            <div class="chat-bubble me">Cảm ơn bạn, mình sẽ đến xem nhé!</div>
+            <div class="chat-time">10:06</div>
+          </div>
+        </div>
+      </div>
+      <!-- Chat Suggestions -->
+      <div class="px-6 pb-2 flex flex-wrap gap-x-2">
+        <span class="chat-suggestion">Bạn có ship COD không?</span>
+        <span class="chat-suggestion">Gửi thêm hình cho mình nhé!</span>
+        <span class="chat-suggestion">Địa chỉ ở đâu vậy?</span>
+        <span class="chat-suggestion">Sản phẩm còn bảo hành không?</span>
+      </div>
+      <!-- Chat Input -->
+      <div class="flex items-center gap-2 px-6 py-4 border-t border-sky-50 bg-white/80 z-20">
+        <button class="text-sky-400 hover:text-indigo-500 transition text-2xl"><i class="ph ph-image"></i></button>
+        <button class="text-sky-400 hover:text-indigo-500 transition text-2xl"><i class="ph ph-camera"></i></button>
+        <button class="text-sky-400 hover:text-indigo-500 transition text-2xl"><i class="ph ph-paperclip"></i></button>
+        <button class="text-sky-400 hover:text-green-500 transition text-2xl" id="send-location"><i class="ph ph-map-pin"></i></button>
+        <input type="text" class="chat-input flex-1 glass px-4 py-2 rounded-xl border border-sky-100 outline-none bg-white/70 focus:ring-2 focus:ring-sky-200 text-base transition" placeholder="Nhập tin nhắn..."/>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-xl font-semibold shadow hover:scale-105 transition whitespace-nowrap flex items-center gap-1"><i class="ph ph-paper-plane-right"></i></button>
+      </div>
+    </section>
+  </main>
+  <script>
+    AOS.init({ duration: 900, once: true });
+
+    // Gợi ý mẫu chat tự động chèn vào input
+    document.querySelectorAll('.chat-suggestion').forEach(e=>{
+      e.onclick=()=>{document.querySelector('.chat-input').value = e.textContent;}
+    });
+
+    // Gửi định vị demo
+    document.getElementById('send-location').onclick = function() {
+      const chat = document.getElementById('chatHistory');
+      const div = document.createElement('div');
+      div.className = 'flex items-end gap-3 mb-3 flex-row-reverse';
+      div.innerHTML = `
+        <img src="https://picsum.photos/id/1001/36/36" class="w-9 h-9 rounded-full" alt="me"/>
+        <div class="text-right">
+          <div class="bubble-info text-right">Bạn</div>
+          <div class="chat-bubble me location flex gap-2 items-center">
+            <i class="ph ph-map-pin text-xl text-green-300"></i>
+            <div>
+              <span class="block mb-1">Tôi đã gửi vị trí của mình</span>
+              <img src="https://maps.googleapis.com/maps/api/staticmap?center=10.762622,106.660172&zoom=15&size=180x90&markers=color:blue%7C10.762622,106.660172" class="rounded-lg border" alt="Map location"/>
+              <span class="block mt-1 text-xs text-green-700">10.7626, 106.6602</span>
+            </div>
+          </div>
+          <div class="chat-time">Bây giờ</div>
+        </div>
+      `;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    };
+
+    // Yêu cầu số điện thoại demo
+    document.getElementById('btn-request-phone').onclick = function() {
+      this.textContent = "Đã gửi yêu cầu SĐT";
+      this.disabled = true;
+      this.style.opacity = "0.7";
+      setTimeout(()=>{
+        this.textContent = "Yêu cầu SĐT";
+        this.disabled = false;
+        this.style.opacity = "1";
+      }, 3500);
+    };
+    // Thêm liên hệ demo
+    document.getElementById('btn-add-contact').onclick = function() {
+      this.textContent = "Đã thêm liên hệ";
+      this.disabled = true;
+      this.style.opacity = "0.7";
+      setTimeout(()=>{
+        this.textContent = "Thêm liên hệ";
+        this.disabled = false;
+        this.style.opacity = "1";
+      }, 3500);
+    };
+    // Chặn liên hệ demo
+    document.getElementById('btn-block').onclick = function() {
+      if(confirm("Bạn có chắc chắn muốn chặn liên hệ này?")) {
+        this.textContent = "Đã chặn";
+        this.disabled = true;
+        this.style.opacity = "0.6";
+      }
+    };
+  </script>
+</body>
+</html>
