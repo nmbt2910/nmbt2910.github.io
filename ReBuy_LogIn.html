@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Đăng nhập / Đăng ký - ReBuy</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html, body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 70% 100% at 60% 8%, #e0f2fe 35%, #f8fafc 100%);
+      position: relative;
+      transition: background 0.5s;
+    }
+    .glass-auth {
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 8px 32px 0 rgba(56,189,248,0.07), 0 2px 12px 0 rgba(80,120,200,0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 2rem;
+      border: 1.3px solid rgba(202,228,248, 0.13);
+      transition: background 0.5s, border 0.4s;
+    }
+    .neumorph-btn {
+      background: #fbbf24;
+      color: #fff;
+      box-shadow: 0 2px 14px 0 rgba(251,191,36,0.14);
+    }
+    .auth-divider {
+      position: relative;
+      text-align: center;
+      margin: 24px 0 18px 0;
+    }
+    .auth-divider span {
+      background: inherit;
+      position: relative;
+      z-index: 1;
+      padding: 0 16px;
+      color: #64748b;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .auth-divider::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 50%; height: 1px;
+      background: linear-gradient(90deg, #cfd8e3 0%, #e0e7ef 100%);
+      z-index: 0;
+    }
+    .auth-social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-weight: 600;
+      font-size: 1.07rem;
+      border-radius: 0.8rem;
+      height: 44px;
+      transition: box-shadow .18s, background .18s, color .18s;
+      box-shadow: 0 2px 10px 0 rgba(56,189,248,0.06);
+      border: 1.4px solid #e4eaf1;
+      background: #f8fafc;
+    }
+    .auth-social-btn:hover {
+      background: #e0f2fe;
+      color: #0369a1;
+      border-color: #bae6fd;
+      box-shadow: 0 6px 16px 0 rgba(56,189,248,0.11);
+      transform: translateY(-2.5px) scale(1.03);
+    }
+    .glass-field {
+      background: rgba(248,250,252,0.72);
+      border: 1.5px solid #e0e7ef;
+      outline: none;
+      transition: border .18s, background .18s;
+      color: #222f3e;
+      font-weight: 500;
+      border-radius: 0.9rem;
+    }
+    .glass-field:focus {
+      border-color: #38bdf8;
+      background: #fff;
+      box-shadow: 0 0 0 2px #bae6fd;
+    }
+    .auth-link {
+      color: #0ea5e9;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .16s;
+    }
+    .auth-link:hover { color: #1d4ed8; text-decoration: underline;}
+    .auth-checkbox {
+      accent-color: #fbbf24;
+      width: 1.2rem; height: 1.2rem;
+    }
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+      transition: opacity .4s;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 100px; height: 100px; background: #38bdf8; left: 11vw; top: 7vh; animation-delay: 0s;}
+    .float-shape2 { width: 70px; height: 70px; background: #fbbf24; right: 19vw; top: 21vh; animation-delay: 2s;}
+    .float-shape3 { width: 60px; height: 60px; background: #34d399; left: 31vw; bottom: 11vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.085);}
+    }
+    @media (max-width: 900px) {
+      .glass-auth { border-radius: 1.3rem;}
+    }
+    @media (max-width: 640px) {
+      .glass-auth { border-radius: 1rem;}
+      .gradient-title { font-size: 1.3rem;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa] transition-colors duration-300">
+  <!-- Animated Background shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+  <!-- Auth Card -->
+  <main class="flex flex-col items-center justify-center min-h-screen px-2 py-10">
+    <div class="w-full max-w-md glass-auth p-7 md:p-10 relative z-10 shadow-xl" data-aos="zoom-in">
+      <div class="flex items-center gap-2 mb-7">
+        <span class="gradient-title text-2xl md:text-3xl select-none">ReBuy</span>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Beta</span>
+      </div>
+      <!-- Tabs -->
+      <div class="flex mb-6 text-xl font-bold gap-5">
+        <button id="tabLogin" class="transition text-gray-700 border-b-4 border-yellow-400 pb-2 focus:outline-none" aria-selected="true">Đăng nhập</button>
+        <button id="tabRegister" class="transition text-gray-400 border-b-4 border-transparent pb-2 focus:outline-none" aria-selected="false">Đăng ký</button>
+      </div>
+      <!-- Login Form -->
+      <form id="loginForm" autocomplete="off" class="flex flex-col gap-4" aria-label="Đăng nhập">
+        <input type="tel" inputmode="tel" autocomplete="username" maxlength="20" required aria-label="Số điện thoại" placeholder="Số điện thoại" class="glass-field px-5 py-3 text-base" />
+        <input type="password" autocomplete="current-password" required aria-label="Mật khẩu" placeholder="Mật khẩu" class="glass-field px-5 py-3 text-base" />
+        <div class="flex justify-between items-center mt-1 mb-2">
+          <a href="#" class="auth-link text-sm">Quên mật khẩu?</a>
+        </div>
+        <button type="submit" class="neumorph-btn w-full py-3 rounded-xl font-bold text-base shadow hover:scale-105 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-300">ĐĂNG NHẬP</button>
+      </form>
+      <!-- Register Form -->
+      <form id="registerForm" autocomplete="off" class="flex flex-col gap-4 hidden" aria-label="Đăng ký">
+        <input type="text" autocomplete="name" maxlength="50" required aria-label="Họ và tên" placeholder="Họ và tên" class="glass-field px-5 py-3 text-base" />
+        <input type="tel" inputmode="tel" autocomplete="username" maxlength="20" required aria-label="Số điện thoại" placeholder="Số điện thoại" class="glass-field px-5 py-3 text-base" />
+        <input type="password" autocomplete="new-password" required aria-label="Mật khẩu" placeholder="Mật khẩu" class="glass-field px-5 py-3 text-base" />
+        <div class="flex items-center gap-2 text-sm mt-1 mb-2">
+          <input type="checkbox" required id="agree" class="auth-checkbox"/>
+          <label for="agree" class="text-gray-700">Bằng việc Đăng ký, bạn đã đọc và đồng ý với
+            <a href="#" class="auth-link" target="_blank" tabindex="0">Điều khoản sử dụng</a> &
+            <a href="#" class="auth-link" target="_blank" tabindex="0">Chính sách bảo mật</a>
+          </label>
+        </div>
+        <button type="submit" class="neumorph-btn w-full py-3 rounded-xl font-bold text-base shadow hover:scale-105 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-yellow-300">ĐĂNG KÝ</button>
+      </form>
+      <div class="auth-divider"><span>Hoặc đăng nhập bằng</span></div>
+      <div class="flex gap-2 mb-2">
+        <button class="auth-social-btn flex-1" tabindex="0" aria-label="Đăng nhập bằng Facebook">
+          <i class="ph ph-facebook-logo text-blue-600 text-xl"></i> Facebook
+        </button>
+        <button class="auth-social-btn flex-1" tabindex="0" aria-label="Đăng nhập bằng Google">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" class="w-5 h-5" style="margin-top:-2px"/> Google
+        </button>
+        <button class="auth-social-btn flex-1" tabindex="0" aria-label="Đăng nhập bằng Apple">
+          <i class="ph ph-apple-logo text-black text-xl"></i> Apple ID
+        </button>
+      </div>
+      <div class="mt-5 text-sm text-center text-gray-500">
+        <span id="toggleTextLogin">
+          Chưa có tài khoản?
+          <a href="#" id="switchToRegister" class="auth-link">Đăng ký tài khoản mới</a>
+        </span>
+        <span id="toggleTextRegister" class="hidden">
+          Đã có tài khoản? <a href="#" id="switchToLogin" class="auth-link">Đăng nhập ngay</a>
+        </span>
+      </div>
+    </div>
+    <div class="text-center mt-8 text-xs text-gray-400">
+      © 2025 ReBuy. Cuộc cách mạng mới cho đồ vật cũ.
+    </div>
+  </main>
+  <script>
+    // Animate On Scroll
+    AOS.init({ duration: 800, once: true });
+
+    // Tab switching
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const toggleTextLogin = document.getElementById('toggleTextLogin');
+    const toggleTextRegister = document.getElementById('toggleTextRegister');
+    const switchToRegister = document.getElementById('switchToRegister');
+    const switchToLogin = document.getElementById('switchToLogin');
+
+    function showLogin() {
+      tabLogin.classList.add('text-gray-700','border-yellow-400');
+      tabLogin.classList.remove('text-gray-400','border-transparent');
+      tabLogin.setAttribute('aria-selected','true');
+      tabRegister.classList.remove('text-gray-700','border-yellow-400');
+      tabRegister.classList.add('text-gray-400','border-transparent');
+      tabRegister.setAttribute('aria-selected','false');
+      loginForm.classList.remove('hidden');
+      registerForm.classList.add('hidden');
+      toggleTextLogin.classList.remove('hidden');
+      toggleTextRegister.classList.add('hidden');
+    }
+    function showRegister() {
+      tabRegister.classList.add('text-gray-700','border-yellow-400');
+      tabRegister.classList.remove('text-gray-400','border-transparent');
+      tabRegister.setAttribute('aria-selected','true');
+      tabLogin.classList.remove('text-gray-700','border-yellow-400');
+      tabLogin.classList.add('text-gray-400','border-transparent');
+      tabLogin.setAttribute('aria-selected','false');
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+      toggleTextLogin.classList.add('hidden');
+      toggleTextRegister.classList.remove('hidden');
+    }
+    tabLogin.onclick = showLogin;
+    tabRegister.onclick = showRegister;
+    switchToRegister.onclick = function(e){e.preventDefault(); showRegister();}
+    switchToLogin.onclick = function(e){e.preventDefault(); showLogin();}
+
+    // Minimal realtime field focus/blur animation
+    document.querySelectorAll('.glass-field').forEach(field => {
+      field.addEventListener('focus', e => e.target.classList.add('ring-2','ring-sky-300'));
+      field.addEventListener('blur', e => e.target.classList.remove('ring-2','ring-sky-300'));
+    });
+  </script>
+</body>
+</html>
