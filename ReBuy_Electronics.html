@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ReBuy - Đồ Điện Tử</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html,body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .glass-hover:hover { 
+      box-shadow: 0 8px 32px 0 rgba(72, 139, 255, 0.09), 0 2px 12px 0 rgba(80,120,200,0.12); 
+      transform: translateY(-4px) scale(1.04);
+    }
+    .neumorph {
+      background: #f4f8fb;
+      box-shadow: 2px 2px 18px #e8eef3, -2px -2px 18px #ffffff;
+      border-radius: 1.5rem;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    ::-webkit-scrollbar { height: 6px; width: 6px; background: transparent;}
+    ::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .carousel-track::-webkit-scrollbar {
+      height: 8px;
+      background: transparent;
+    }
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 80%);
+      border-radius: 9999px;
+      min-width: 60px;
+      transition: background 0.3s;
+    }
+    .carousel-track {
+      scrollbar-color: #38bdf8 #e0f2fe;
+      scrollbar-width: thin;
+    }
+    .carousel-track:active::-webkit-scrollbar-thumb,
+    .carousel-track:focus::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #6366f1 0%, #38bdf8 80%);
+    }
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .header-shadow {
+      box-shadow: 0 2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .footer-shadow {
+      box-shadow: 0 -2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .avatar-btn {
+      border: 2px solid #e0f2fe;
+      box-shadow: 0 2px 12px 0 rgba(56,189,248,0.07);
+      transition: box-shadow 0.2s, border 0.2s;
+      background: linear-gradient(135deg, #e0f2fe 80%, #fff 100%);
+    }
+    .avatar-btn:hover, .avatar-btn:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 4px 32px 0 rgba(56,189,248,0.19);
+    }
+    .profile-dropdown {
+      min-width: 190px;
+      right: 0;
+      top: 120%;
+      background: rgba(255,255,255,0.99);
+      box-shadow: 0 6px 24px 0 rgba(56,189,248,0.13);
+      border-radius: 1rem;
+      padding: 0.5rem 0;
+      z-index: 99;
+      border: 1px solid #e0f2fe;
+      display: none;
+      position: absolute;
+    }
+    .profile-dropdown.active { display: block; animation: fadeIn 0.24s;}
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;}}
+    .profile-dropdown a, .profile-dropdown button {
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1.2rem;
+      background: none;
+      border: none;
+      color: #334155;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: background 0.12s;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+    }
+    .profile-dropdown a:hover, .profile-dropdown button:hover { background: #e0f2fe;}
+    .btn-main { box-shadow: 0 2px 10px 0 rgba(56,189,248,0.08);}
+    .category-scroll {
+      overflow-x: auto;
+      display: flex;
+      gap: 1.3rem;
+      padding-bottom: 0.2rem;
+      scrollbar-width: thin;
+      scrollbar-color: #38bdf8 #fff;
+    }
+    .category-scroll::-webkit-scrollbar { height: 6px;}
+    .category-scroll::-webkit-scrollbar-thumb { background: #bae6fd;}
+    .filter-scroll {
+      overflow-x: auto;
+      display: flex;
+      gap: 0.7rem;
+      padding-bottom: 0.1rem;
+      scrollbar-width: thin;
+      scrollbar-color: #e0f2fe #fff;
+    }
+    .filter-scroll::-webkit-scrollbar { height: 4px;}
+    .filter-scroll::-webkit-scrollbar-thumb { background: #e0f2fe;}
+    @media (max-width: 900px) {
+      .glass { border-radius: 1.1rem;}
+      .neumorph { border-radius: 1.1rem;}
+    }
+    @media (max-width: 768px) {
+      .category-scroll { gap: 0.7rem;}
+      .glass { border-radius: 1rem;}
+      .profile-dropdown { min-width: 140px;}
+    }
+    @media (max-width: 640px) {
+      .glass { border-radius: 0.7rem;}
+      .profile-dropdown { min-width: 110px;}
+    }
+    .tag-badge {
+      font-size: 0.8em;
+      padding: 0.2em 0.7em;
+      border-radius: 0.8em;
+      background: #e0f2fe;
+      color: #0ea5e9;
+      margin-left: 0.5em;
+      font-weight: 600;
+    }
+    .hot-badge {
+      background: linear-gradient(90deg, #fbbf24 60%, #f87171 100%);
+      color: white;
+      padding: 0.2em 0.9em;
+      font-size: 0.82em;
+      border-radius: 0.8em;
+      font-weight: 700;
+      margin-right: 0.5em;
+      box-shadow: 0 2px 8px 0 rgba(253,186,116,0.10);
+    }
+    .trust-badge {
+      background: linear-gradient(90deg, #38bdf8 30%, #6366f1 100%);
+      color: #fff;
+      padding: 0.2em 0.8em;
+      font-size: 0.82em;
+      border-radius: 0.8em;
+      font-weight: 700;
+      margin-right: 0.5em;
+      box-shadow: 0 2px 8px 0 rgba(56,189,248,0.12);
+    }
+    .like-btn { 
+      color: #e2e8f0; 
+      font-size: 1.3em;
+      transition: color 0.14s;
+      cursor: pointer;
+    }
+    .like-btn.liked { color: #f87171; }
+    .category-banner-bg {
+      background: linear-gradient(90deg, #e0f2fe 0%, #f8fafc 100%);
+      border-radius: 2rem;
+      min-height: 170px;
+      box-shadow: 0 4px 30px 0 rgba(56,189,248,0.11);
+      background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80');
+      background-size: cover;
+      background-position: right center;
+      position: relative;
+      overflow: hidden;
+    }
+    .category-banner-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,rgba(255,255,255,0.93) 40%,rgba(255,255,255,0.11) 100%);
+      z-index: 1;
+    }
+    .category-banner-content {
+      position: relative;
+      z-index: 2;
+    }
+    /* Small fade top for section */
+    .section-fade {
+      box-shadow: 0 -16px 40px 0 rgba(56,189,248,0.07);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+
+  <!-- Header -->
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50" data-aos="fade-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 lg:py-3">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 min-w-[110px]">
+        <span class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</span>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Đã đăng nhập</span>
+      </div>
+      <!-- Search -->
+      <form class="flex-1 mx-4 max-w-2xl hidden md:flex relative" role="search" autocomplete="off">
+        <div class="search-loc select-none" tabindex="0" title="Chọn vị trí của bạn" id="locationBtn">
+          <i class="ph ph-map-pin pulse-pin text-lg"></i>
+          <span id="user-location">Hồ Chí Minh</span>
+        </div>
+        <input 
+          aria-label="Tìm kiếm đồ điện tử" 
+          class="glass w-full px-6 py-3 rounded-lg outline-none focus:ring-2 focus:ring-sky-300 transition-all text-base text-gray-800 placeholder-gray-400 pl-[150px] md:pl-[165px]" 
+          type="search" 
+          placeholder="Tìm kiếm Đồ điện tử, thương hiệu, model..." 
+          style="padding-left: 155px;"
+        />
+        <button type="submit" class="ml-2 btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-3 rounded-lg font-semibold shadow hover:scale-105 transition whitespace-nowrap">Tìm kiếm</button>
+      </form>
+      <!-- Actions -->
+      <div class="flex items-center gap-2 sm:gap-4 min-w-[250px] justify-end">
+        <button class="relative glass p-2 rounded-full hover:bg-sky-50 border border-sky-100 flex items-center transition" title="Thông báo">
+          <i class="ph ph-bell text-2xl text-sky-600"></i>
+          <span class="absolute -top-1.5 -right-1.5 bg-fuchsia-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5 shadow" style="font-size:0.72em;">2</span>
+        </button>
+        <button class="glass p-2 rounded-full hover:bg-sky-50 border border-sky-100 flex items-center transition" title="Chat">
+          <i class="ph ph-chat-circle-text text-2xl text-indigo-500"></i>
+        </button>
+        <a href="#" class="glass px-4 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+          <i class="ph ph-note-pencil text-xl"></i>
+          Quản lý tin
+        </a>
+        <!-- Avatar dropdown -->
+        <div class="relative flex items-center">
+          <button class="avatar-btn flex items-center gap-2 px-2 py-1 rounded-full focus:outline-none" id="avatarMenuBtn">
+            <img src="https://picsum.photos/id/1005/40/40" alt="Avatar" class="w-9 h-9 rounded-full object-cover border-2 border-white shadow" />
+            <span class="hidden sm:inline font-semibold text-gray-700 text-base">Tuấn</span>
+            <i class="ph ph-caret-down text-lg text-sky-600 ml-1"></i>
+          </button>
+          <div class="profile-dropdown absolute" id="profileDropdown">
+            <a href="#"><i class="ph ph-user"></i> Hồ sơ cá nhân</a>
+            <a href="#"><i class="ph ph-heart"></i> Tin đã lưu</a>
+            <a href="#"><i class="ph ph-note-pencil"></i> Quản lý tin</a>
+            <a href="#"><i class="ph ph-gear"></i> Cài đặt</a>
+            <button id="logoutBtn"><i class="ph ph-sign-out"></i> Đăng xuất</button>
+          </div>
+        </div>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition flex items-center gap-2 text-base ml-1">
+          <i class="ph ph-plus-circle text-xl"></i>
+          Đăng tin
+        </button>
+      </div>
+    </div>
+    <!-- Location on mobile -->
+    <div class="block md:hidden max-w-2xl mx-auto px-4 mt-2">
+      <div class="search-loc" tabindex="0" id="locationBtnMobile" style="width:100%;">
+        <i class="ph ph-map-pin pulse-pin text-lg"></i>
+        <span id="user-location-mobile">Hồ Chí Minh</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner danh mục -->
+  <section class="max-w-7xl mx-auto mt-7 px-4 mb-6" data-aos="fade-up">
+    <div class="category-banner-bg flex flex-col sm:flex-row items-center glass">
+      <div class="category-banner-content flex-1 p-8">
+        <h1 class="text-3xl md:text-4xl font-extrabold gradient-title mb-3">Đồ điện tử</h1>
+        <p class="text-lg text-gray-600 font-semibold mb-1">Chọn mua dễ dàng, giá hợp lý</p>
+        <p class="text-base text-gray-500 max-w-md">
+          Mua bán các loại điện thoại, laptop, máy tính bảng, tai nghe, tivi, máy ảnh, phụ kiện... đã qua sử dụng, chất lượng đảm bảo cho sinh viên, văn phòng, người đi làm.
+        </p>
+      </div>
+      <div class="flex-1 flex justify-end items-end h-full relative min-h-[150px] z-10 pt-4 pr-4">
+        <img src="https://picsum.photos/id/1033/260/170" alt="Điện tử" class="rounded-2xl shadow-2xl ring-2 ring-sky-100 object-cover w-[200px] h-[140px] glass border border-white/60" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Danh mục con (icon scroll) -->
+  <section class="max-w-7xl mx-auto px-4" data-aos="fade-up">
+    <div class="category-scroll mb-2 py-3">
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-device-mobile text-2xl text-indigo-400 group-hover:text-sky-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Điện thoại</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-laptop text-2xl text-sky-400 group-hover:text-indigo-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Laptop</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-tablet text-2xl text-fuchsia-400 group-hover:text-orange-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Máy tính bảng</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-headphones text-2xl text-green-400 group-hover:text-sky-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Tai nghe</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-speaker-hifi text-2xl text-orange-400 group-hover:text-fuchsia-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Loa</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-television text-2xl text-yellow-400 group-hover:text-indigo-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Tivi</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-camera text-2xl text-sky-400 group-hover:text-indigo-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Máy ảnh</span>
+      </a>
+      <a href="#" class="flex flex-col items-center px-4 py-3 glass glass-hover group cursor-pointer transition-all hover:scale-105">
+        <i class="ph ph-plug-charging text-2xl text-indigo-400 group-hover:text-sky-400 mb-1"></i>
+        <span class="text-gray-700 font-semibold text-xs">Phụ kiện</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Bộ lọc nổi bật -->
+  <section class="max-w-7xl mx-auto px-4" data-aos="fade-up">
+    <div class="filter-scroll mb-6 pt-1">
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-sky-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2 active bg-sky-50"><i class="ph ph-list text-lg"></i> Tất cả</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-gray-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-clock text-lg"></i> Mới đăng</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-gray-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-arrow-down text-lg"></i> Giá thấp đến cao</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-gray-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-arrow-up text-lg"></i> Giá cao đến thấp</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-gray-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-shield-check text-lg"></i> Có bảo hành</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-gray-700 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-map-pin text-lg"></i> Gần bạn</button>
+      <button class="glass px-5 py-2 rounded-xl font-semibold text-indigo-600 border border-sky-200 hover:bg-sky-50 transition-all shadow flex items-center gap-2"><i class="ph ph-star text-lg"></i> Shop uy tín</button>
+    </div>
+  </section>
+
+  <!-- Carousel "Có gì hot hôm nay" -->
+  <section class="max-w-7xl mx-auto px-4" data-aos="fade-up">
+    <h2 class="text-2xl font-extrabold text-gray-800 mb-4">Có gì <span class="text-sky-400">hot hôm nay</span></h2>
+    <div class="relative group mb-2">
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-[#f2f6fa] via-[#f2f6fa]/80 to-transparent z-10"></div>
+      <div class="carousel-track overflow-x-auto flex gap-4 md:gap-6 pb-2 pt-1" tabindex="0">
+        <!-- Mẫu card nổi bật -->
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1004/220/130" alt="Điện thoại hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="hot-badge absolute top-2 left-2">Hot</span>
+          <span class="absolute top-2 right-2 trust-badge">Shop uy tín</span>
+          <div class="font-semibold text-gray-800 truncate">iPhone 14 Pro Max</div>
+          <div class="text-sky-500 font-bold mt-1">16.900.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 1</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1006/220/130" alt="Laptop hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="hot-badge absolute top-2 left-2">Hot</span>
+          <div class="font-semibold text-gray-800 truncate">MacBook Air M2</div>
+          <div class="text-sky-500 font-bold mt-1">22.000.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Gò Vấp</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1012/220/130" alt="Máy tính bảng hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="hot-badge absolute top-2 left-2">Hot</span>
+          <div class="font-semibold text-gray-800 truncate">iPad Pro 2021</div>
+          <div class="text-sky-500 font-bold mt-1">15.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Bình Thạnh</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1018/220/130" alt="Tai nghe hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="hot-badge absolute top-2 left-2">Hot</span>
+          <div class="font-semibold text-gray-800 truncate">AirPods Pro 2</div>
+          <div class="text-sky-500 font-bold mt-1">3.200.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. Tân Bình</div>
+        </div>
+        <div class="min-w-[215px] glass glass-hover p-3 md:p-4 rounded-xl flex-shrink-0 transition-all shadow-md relative">
+          <img src="https://picsum.photos/id/1020/220/130" alt="Tivi hot" class="rounded-lg mb-2 object-cover w-full h-[110px] md:h-[130px]" />
+          <span class="hot-badge absolute top-2 left-2">Hot</span>
+          <div class="font-semibold text-gray-800 truncate">Tivi LG 55inch 4K</div>
+          <div class="text-sky-500 font-bold mt-1">10.500.000₫</div>
+          <div class="flex items-center gap-1 text-xs text-gray-400 mt-1"><i class="ph ph-map-pin"></i> Q. 10</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lưới sản phẩm đề xuất -->
+  <section class="max-w-7xl mx-auto px-4 mt-10" data-aos="fade-up">
+    <h2 class="text-2xl font-extrabold text-gray-800 mb-4">Tin đăng <span class="text-sky-400">Đồ điện tử</span> dành cho bạn</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-7">
+      <!-- Card sản phẩm -->
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col relative">
+        <img src="https://picsum.photos/id/100/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">iPhone 13 ProMax 128GB</div>
+        <div class="text-sky-500 font-bold mt-1">13.600.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Bình Thạnh</div>
+        <button class="like-btn absolute top-3 right-3" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col relative">
+        <img src="https://picsum.photos/id/101/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Laptop Dell XPS 13</div>
+        <div class="text-sky-500 font-bold mt-1">16.500.000₫</div>
+        <span class="trust-badge absolute top-3 left-3">Shop uy tín</span>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 3</div>
+        <button class="like-btn absolute top-3 right-3" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col relative">
+        <img src="https://picsum.photos/id/102/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">iPad Mini 6 64GB</div>
+        <div class="text-sky-500 font-bold mt-1">6.400.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 7</div>
+        <button class="like-btn absolute top-3 right-3" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col relative">
+        <img src="https://picsum.photos/id/103/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">AirPods Pro 2 Like New</div>
+        <div class="text-sky-500 font-bold mt-1">2.900.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. Tân Bình</div>
+        <button class="like-btn absolute top-3 right-3" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+      <div class="glass glass-hover p-4 rounded-2xl shadow-md transition-all flex flex-col relative">
+        <img src="https://picsum.photos/id/104/260/180" alt="item" class="rounded-xl object-cover mb-3 w-full h-[140px]" />
+        <div class="font-semibold text-gray-800 truncate">Tivi Sony 4K HDR 43"</div>
+        <div class="text-sky-500 font-bold mt-1">7.700.000₫</div>
+        <div class="flex items-center gap-1 text-xs text-gray-400 mt-2"><i class="ph ph-map-pin"></i> Q. 10</div>
+        <button class="like-btn absolute top-3 right-3" aria-label="Yêu thích"><i class="ph ph-heart"></i></button>
+      </div>
+    </div>
+    <div class="flex justify-center mt-7">
+      <button class="glass px-8 py-3 rounded-xl font-bold text-sky-500 border border-sky-200 hover:bg-sky-50 transition-all shadow">Xem thêm</button>
+    </div>
+  </section>
+
+  <!-- Mô tả danh mục & thông tin cần biết -->
+  <section class="max-w-7xl mx-auto px-4 mt-12 mb-6" data-aos="fade-up">
+    <div class="glass section-fade p-7 rounded-2xl shadow-md flex flex-col md:flex-row items-center gap-6">
+      <div class="flex-1">
+        <h3 class="text-xl font-bold gradient-title mb-2">Mua bán Đồ điện tử uy tín, giá rẻ trên ReBuy</h3>
+        <p class="text-gray-600 mb-2">
+          ReBuy giúp bạn dễ dàng tiếp cận hàng ngàn sản phẩm công nghệ đã qua sử dụng, kiểm duyệt chất lượng, giá tốt. Hỗ trợ lọc sản phẩm theo vị trí, giá, bảo hành, shop uy tín... Tiết kiệm chi phí, bảo vệ môi trường!
+        </p>
+        <a href="#" class="inline-block mt-2 font-semibold text-sky-500 hover:text-indigo-500 transition">Xem thêm thông tin &gt;</a>
+      </div>
+      <div class="flex-1 flex justify-end">
+        <img src="https://picsum.photos/id/1017/250/140" alt="Mô tả" class="rounded-xl glass shadow-xl border border-white/60" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer giữ nguyên -->
+  <footer class="w-full footer-shadow bg-white/95 mt-16 border-t border-sky-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10 py-10 rounded-none md:rounded-3xl grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <span class="gradient-title font-extrabold text-2xl tracking-tight">ReBuy</span>
+        <p class="mt-3 text-sm font-medium text-gray-400">
+          Nền tảng mua bán đồ cũ chất lượng cao cho sinh viên, dân văn phòng, người thuê trọ.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <a href="#" class="social-round" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Messenger"><i class="ph ph-messenger-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Danh mục</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Xe cộ</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điện thoại</a></li>
+          <li><a href="#" class="hover:text-sky-500">Đồ điện tử</a></li>
+          <li><a href="#" class="hover:text-sky-500">Nội thất</a></li>
+          <li><a href="#" class="hover:text-sky-500">Thời trang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ khách hàng</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Trung tâm trợ giúp</a></li>
+          <li><a href="#" class="hover:text-sky-500">An toàn & bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Liên hệ hỗ trợ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Về ReBuy</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Giới thiệu</a></li>
+          <li><a href="#" class="hover:text-sky-500">Chính sách bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điều khoản sử dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+      © 2024 ReBuy. Made for the community. | Liên hệ: support@rebuy.vn
+    </div>
+  </footer>
+
+  <script>
+    // Animate On Scroll
+    AOS.init({ duration: 900, once: true });
+
+    // Responsive Search
+    function handleSearchBox() {
+      const form = document.querySelector('form[role="search"]');
+      if(window.innerWidth < 768) form.classList.remove('flex');
+      else form.classList.add('flex');
+    }
+    window.addEventListener('resize', handleSearchBox); handleSearchBox();
+
+    // Định vị vị trí người dùng (fake demo)
+    function setLocation(name) {
+      if(document.getElementById('user-location')) document.getElementById('user-location').textContent = name;
+      if(document.getElementById('user-location-mobile')) document.getElementById('user-location-mobile').textContent = name;
+    }
+    function getUserLocation() {
+      if (!navigator.geolocation) {
+        setLocation('Không hỗ trợ vị trí');
+        return;
+      }
+      setLocation('Đang lấy vị trí...');
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        const lat = pos.coords.latitude.toFixed(4);
+        const lon = pos.coords.longitude.toFixed(4);
+        setLocation(`(${lat}, ${lon})`);
+      }, function() {
+        setLocation('Không xác định');
+      }, {timeout: 5000});
+    }
+    document.getElementById('locationBtn').onclick = getUserLocation;
+    if(document.getElementById('locationBtnMobile')) document.getElementById('locationBtnMobile').onclick = getUserLocation;
+
+    // Profile dropdown
+    const avatarMenuBtn = document.getElementById('avatarMenuBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    if (avatarMenuBtn && profileDropdown) {
+      avatarMenuBtn.onclick = function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+      };
+      document.addEventListener('click', function(e) {
+        if (!profileDropdown.contains(e.target) && !avatarMenuBtn.contains(e.target)) {
+          profileDropdown.classList.remove('active');
+        }
+      });
+    }
+    // Like button effect (demo)
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        btn.classList.toggle('liked');
+      });
+    });
+    // Logout (demo)
+    document.getElementById('logoutBtn')?.addEventListener('click', function(){
+      alert('Đăng xuất thành công!');
+    });
+  </script>
+</body>
+</html>
