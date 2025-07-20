@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ReBuy - Đăng Tin Điện Thoại</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html,body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .neumorph {
+      background: #f4f8fb;
+      box-shadow: 2px 2px 18px #e8eef3, -2px -2px 18px #ffffff;
+      border-radius: 1.5rem;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    ::-webkit-scrollbar { height: 6px; width: 6px; background: transparent;}
+    ::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .btn-main { box-shadow: 0 2px 10px 0 rgba(56,189,248,0.08);}
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .header-shadow {
+      box-shadow: 0 2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .glass-hover:hover { 
+      box-shadow: 0 8px 32px 0 rgba(72, 139, 255, 0.09), 0 2px 12px 0 rgba(80,120,200,0.12); 
+      transform: translateY(-4px) scale(1.04);
+    }
+    .form-label {
+      font-weight: 600;
+      color: #0369a1;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      border-radius: 0.8rem;
+      padding: 0.74rem 1.1rem;
+      border: 1.5px solid #e0f2fe;
+      background: rgba(245,249,255,0.85);
+      font-size: 1rem;
+      color: #1e293b;
+      transition: border 0.18s, box-shadow 0.18s;
+      box-shadow: 0 1.5px 6px rgba(80,120,200,0.07);
+      outline: none;
+      margin-bottom: 0.1rem;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: #38bdf8;
+      background: #fff;
+      box-shadow: 0 0 0 2px #bae6fd44;
+    }
+    .form-error {
+      color: #ef4444;
+      font-size: 0.95rem;
+      margin-top: 0.1rem;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+      min-height: 1.5em;
+      display: block;
+    }
+    .image-upload-box {
+      border: 2px dashed #bae6fd;
+      border-radius: 1.1rem;
+      min-height: 190px;
+      background: linear-gradient(135deg, #f0faff 60%, #f2f6fa 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.22s, box-shadow 0.22s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .image-upload-box.dragover {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px #38bdf844;
+      background: #e0f2fe33;
+    }
+    .image-upload-icon {
+      color: #38bdf8;
+      font-size: 2.7rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.92;
+    }
+    .image-upload-info {
+      font-size: 1.09rem;
+      color: #64748b;
+      font-weight: 600;
+      text-align: center;
+    }
+    .image-preview-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 0.6rem;
+    }
+    .image-preview-item {
+      width: 70px;
+      height: 70px;
+      border-radius: 0.95rem;
+      overflow: hidden;
+      position: relative;
+      border: 1.5px solid #bae6fd;
+      background: #f6fbff;
+      box-shadow: 0 1.5px 7px rgba(80,120,200,0.07);
+    }
+    .image-preview-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .image-remove-btn {
+      position: absolute;
+      top: 1px;
+      right: 3px;
+      background: #fff;
+      border-radius: 50%;
+      color: #ef4444;
+      font-size: 1.18rem;
+      border: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.15s;
+    }
+    .image-remove-btn:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .video-upload-box {
+      border: 2px dashed #fbbf24;
+      border-radius: 1.1rem;
+      min-height: 80px;
+      background: linear-gradient(135deg, #fffbee 70%, #fefce8 100%);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.1rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      margin-top: 0.6rem;
+      transition: border-color 0.22s;
+      position: relative;
+    }
+    .video-upload-box:hover, .video-upload-box.dragover {
+      border-color: #f59e42;
+      background: #fef9c3aa;
+    }
+    .video-upload-icon {
+      color: #fbbf24;
+      font-size: 2.2rem;
+    }
+    .video-upload-info {
+      font-size: 1.05rem;
+      color: #ca8a04;
+      font-weight: 600;
+    }
+    .video-preview-thumb {
+      width: 75px; height: 50px; border-radius: 0.7rem; background: #fefce8; object-fit: cover;
+      margin-left: 0.8rem;
+      box-shadow: 0 1.5px 7px rgba(251,191,36,0.09);
+    }
+    .custom-checkbox {
+      accent-color: #38bdf8;
+      width: 1.17em; height: 1.17em;
+    }
+    .form-group { margin-bottom: 1.2rem;}
+    @media (max-width: 900px) {
+      .glass { border-radius: 1.1rem;}
+      .neumorph { border-radius: 1.1rem;}
+    }
+    @media (max-width: 768px) {
+      .main-form-wrap { flex-direction: column;}
+      .main-form-left, .main-form-right { width: 100%!important; }
+      .main-form-right { padding-left: 0!important; }
+    }
+    @media (max-width: 640px) {
+      .form-label { font-size: 0.98rem;}
+      .form-input, .form-select { font-size: 0.98rem; }
+      .main-form-wrap { gap: 1.4rem!important;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+
+  <!-- Header -->
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50" data-aos="fade-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 lg:py-3">
+      <div class="flex items-center gap-3 min-w-[110px]">
+        <span class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</span>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Beta</span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-4 min-w-[200px] justify-end">
+        <button class="glass px-5 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+          <i class="ph ph-user text-xl"></i>
+          Đăng nhập
+        </button>
+        <button class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition flex items-center gap-2 text-base">
+          <i class="ph ph-plus-circle text-xl"></i>
+          Đăng tin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN FORM -->
+  <main class="max-w-5xl mx-auto mt-10 mb-16 px-2 sm:px-6">
+    <div class="glass shadow-xl p-7 sm:p-10 rounded-3xl">
+      <h1 class="text-2xl md:text-3xl font-extrabold gradient-title mb-8 text-center">Đăng Tin Bán Điện Thoại</h1>
+      <form id="postForm" class="flex main-form-wrap gap-10" autocomplete="off" novalidate>
+        <!-- LEFT: ẢNH & VIDEO -->
+        <div class="main-form-left w-[350px] flex-shrink-0 min-w-[270px]">
+          <h2 class="text-lg font-bold text-gray-800 mb-3">Hình ảnh & Video</h2>
+          <div class="mb-3 text-sm text-gray-500">
+            <a href="#" class="underline text-sky-500 hover:text-sky-700">Hướng dẫn đăng ảnh/video</a>
+          </div>
+          <!-- Upload Ảnh -->
+          <label class="image-upload-box group flex flex-col" id="imgUploadBox">
+            <input type="file" accept="image/*" multiple hidden id="images" name="images" aria-label="Chọn ảnh" />
+            <div class="image-upload-icon flex items-center justify-center"><i class="ph ph-camera"></i></div>
+            <div class="image-upload-info">Đăng từ <b>01</b> đến <b>06</b> hình<br>
+              <span class="text-xs text-blue-400 font-medium">Hình ảnh hợp lệ</span>
+            </div>
+            <div class="image-preview-grid" id="imagePreview"></div>
+          </label>
+          <div class="form-error" id="imgError"></div>
+          <!-- Upload Video -->
+          <label class="video-upload-box flex items-center group" id="videoUploadBox">
+            <input type="file" accept="video/*" hidden id="video" name="video" aria-label="Chọn video" />
+            <span class="video-upload-icon"><i class="ph ph-video-camera"></i></span>
+            <span class="video-upload-info flex flex-col">
+              <span class="font-semibold text-[#f59e42]">Đăng video để bán nhanh hơn</span>
+              <span class="flex items-center gap-1 text-xs text-orange-600">
+                <i class="ph ph-fire-simple"></i> Lượt xem tăng đến <b>x2</b>
+              </span>
+            </span>
+            <video id="videoPreview" class="video-preview-thumb hidden ml-2" controls muted preload="metadata"></video>
+          </label>
+        </div>
+        <!-- RIGHT: THÔNG TIN CHI TIẾT -->
+        <div class="main-form-right flex-1 pl-4">
+          <div class="form-group">
+            <label class="form-label" for="category">Danh mục tin đăng *</label>
+            <select id="category" name="category" class="form-select bg-slate-100 pointer-events-none text-gray-500 font-semibold" disabled>
+              <option selected>Đồ điện tử - Điện thoại</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="condition">Tình trạng *</label>
+            <select id="condition" name="condition" class="form-select" required>
+              <option value="">-- Chọn tình trạng --</option>
+              <option>Mới 100%</option>
+              <option>Như mới</option>
+              <option>Đã sử dụng</option>
+              <option>Còn bảo hành</option>
+              <option>Lỗi/Nhập xác</option>
+            </select>
+            <span class="form-error" data-error-for="condition"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="brand">Hãng *</label>
+            <select id="brand" name="brand" class="form-select" required>
+              <option value="">-- Chọn hãng --</option>
+              <option>Apple</option>
+              <option>Samsung</option>
+              <option>Xiaomi</option>
+              <option>OPPO</option>
+              <option>Vivo</option>
+              <option>Realme</option>
+              <option>Nokia</option>
+              <option>Khác</option>
+            </select>
+            <span class="form-error" data-error-for="brand"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="color">Màu sắc</label>
+            <input type="text" id="color" name="color" class="form-input" placeholder="Nhập màu sắc (ví dụ: Đen, Trắng, Xanh...)"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="storage">Dung lượng</label>
+            <input type="text" id="storage" name="storage" class="form-input" placeholder="Nhập dung lượng (ví dụ: 64GB, 128GB...)"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="warranty">Chính sách bảo hành</label>
+            <input type="text" id="warranty" name="warranty" class="form-input" placeholder="Nhập thông tin bảo hành nếu có"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="origin">Xuất xứ</label>
+            <input type="text" id="origin" name="origin" class="form-input" placeholder="Nhập nơi xuất xứ"/>
+          </div>
+          <div class="form-group flex items-center gap-3">
+            <input id="giveaway" type="checkbox" class="custom-checkbox" name="giveaway" />
+            <label for="giveaway" class="text-base text-sky-700 select-none font-semibold cursor-pointer">Tôi muốn cho tặng miễn phí</label>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="price">Giá bán *</label>
+            <input type="text" id="price" name="price" class="form-input font-semibold" required placeholder="Nhập số tiền (VNĐ hoặc 'Miễn phí')" />
+            <span class="form-error" data-error-for="price"></span>
+          </div>
+        </div>
+      </form>
+      <!-- FOOTER ACTIONS -->
+      <div class="flex flex-col md:flex-row items-center justify-between mt-8 gap-3">
+        <div class="flex items-center gap-2 text-gray-500 text-sm">
+          <i class="ph ph-info text-yellow-500"></i>
+          <span>Đã chọn <b>Đăng tin thường (Miễn phí)</b></span>
+        </div>
+        <div class="flex gap-3 w-full md:w-auto">
+          <button type="button" class="glass px-6 py-3 rounded-xl font-bold text-sky-500 border border-sky-200 hover:bg-sky-50 transition-all shadow w-full md:w-auto">Xem trước</button>
+          <button type="button" class="glass px-6 py-3 rounded-xl font-bold text-gray-700 border border-gray-200 hover:bg-gray-100 transition-all shadow w-full md:w-auto">Lưu nháp</button>
+          <button id="submitBtn" type="submit" form="postForm" class="btn-main bg-gradient-to-br from-sky-400 to-indigo-400 text-white px-8 py-3 rounded-xl font-bold shadow hover:scale-105 hover:shadow-xl transition-all w-full md:w-auto">Đăng tin</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full footer-shadow bg-white/95 mt-16 border-t border-sky-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10 py-10 rounded-none md:rounded-3xl grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <span class="gradient-title font-extrabold text-2xl tracking-tight">ReBuy</span>
+        <p class="mt-3 text-sm font-medium text-gray-400">
+          Nền tảng mua bán đồ cũ chất lượng cao cho sinh viên, dân văn phòng, người thuê trọ.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <a href="#" class="social-round" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Messenger"><i class="ph ph-messenger-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Danh mục</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Xe cộ</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điện thoại</a></li>
+          <li><a href="#" class="hover:text-sky-500">Đồ điện tử</a></li>
+          <li><a href="#" class="hover:text-sky-500">Nội thất</a></li>
+          <li><a href="#" class="hover:text-sky-500">Thời trang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ khách hàng</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Trung tâm trợ giúp</a></li>
+          <li><a href="#" class="hover:text-sky-500">An toàn & bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Liên hệ hỗ trợ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Về ReBuy</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Giới thiệu</a></li>
+          <li><a href="#" class="hover:text-sky-500">Chính sách bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điều khoản sử dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+      © 2024 ReBuy. Made for the community. | Liên hệ: support@rebuy.vn
+    </div>
+  </footer>
+
+  <script>
+    AOS.init({ duration: 900, once: true });
+
+    // ẢNH SẢN PHẨM: Drag & drop, Preview, Remove
+    const imgInput = document.getElementById('images');
+    const imgBox = document.getElementById('imgUploadBox');
+    const imgPreview = document.getElementById('imagePreview');
+    const imgError = document.getElementById('imgError');
+    let imgFiles = [];
+
+    function updateImgPreview() {
+      imgPreview.innerHTML = '';
+      imgFiles.forEach((file, i) => {
+        const url = URL.createObjectURL(file);
+        const div = document.createElement('div');
+        div.className = 'image-preview-item';
+        div.innerHTML = `<img src="${url}" alt="preview"><button type="button" class="image-remove-btn" title="Xóa ảnh" data-idx="${i}"><i class="ph ph-x"></i></button>`;
+        imgPreview.appendChild(div);
+      });
+      // Listen remove
+      imgPreview.querySelectorAll('.image-remove-btn').forEach(btn => {
+        btn.onclick = e => {
+          imgFiles.splice(Number(btn.dataset.idx), 1);
+          updateImgPreview();
+        };
+      });
+    }
+    function validateImgFiles(showMsg = true) {
+      if(imgFiles.length<1) {
+        if(showMsg) imgError.textContent = "Vui lòng chọn ít nhất 1 ảnh sản phẩm.";
+        return false;
+      }
+      if(imgFiles.length>6) {
+        if(showMsg) imgError.textContent = "Chỉ được chọn tối đa 6 ảnh.";
+        return false;
+      }
+      imgError.textContent = '';
+      return true;
+    }
+    imgInput.addEventListener('change', e => {
+      const files = Array.from(e.target.files);
+      imgFiles = imgFiles.concat(files).slice(0,6);
+      updateImgPreview();
+      validateImgFiles();
+    });
+    imgBox.addEventListener('click', ()=>imgInput.click());
+    imgBox.addEventListener('dragover', e=>{
+      e.preventDefault(); imgBox.classList.add('dragover');
+    });
+    imgBox.addEventListener('dragleave', e=>{
+      e.preventDefault(); imgBox.classList.remove('dragover');
+    });
+    imgBox.addEventListener('drop', e=>{
+      e.preventDefault(); imgBox.classList.remove('dragover');
+      const files = Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+      imgFiles = imgFiles.concat(files).slice(0,6);
+      updateImgPreview();
+      validateImgFiles();
+    });
+
+    // VIDEO: Preview
+    const videoInput = document.getElementById('video');
+    const videoBox = document.getElementById('videoUploadBox');
+    const videoPreview = document.getElementById('videoPreview');
+    videoBox.addEventListener('click', ()=>videoInput.click());
+    videoInput.addEventListener('change', e=>{
+      const file = videoInput.files[0];
+      if(file) {
+        videoPreview.src = URL.createObjectURL(file);
+        videoPreview.classList.remove('hidden');
+        videoPreview.load();
+      } else {
+        videoPreview.src = '';
+        videoPreview.classList.add('hidden');
+      }
+    });
+    videoBox.addEventListener('dragover',e=>{
+      e.preventDefault(); videoBox.classList.add('dragover');
+    });
+    videoBox.addEventListener('dragleave',e=>{
+      e.preventDefault(); videoBox.classList.remove('dragover');
+    });
+    videoBox.addEventListener('drop',e=>{
+      e.preventDefault(); videoBox.classList.remove('dragover');
+      const file = Array.from(e.dataTransfer.files).find(f=>f.type.startsWith('video/'));
+      if(file) {
+        videoInput.files = new DataTransfer().files;
+        const dt = new DataTransfer(); dt.items.add(file); videoInput.files = dt.files;
+        videoPreview.src = URL.createObjectURL(file);
+        videoPreview.classList.remove('hidden');
+        videoPreview.load();
+      }
+    });
+
+    // FORM VALIDATION
+    function showError(field, msg) {
+      document.querySelector('[data-error-for="'+field+'"]').textContent = msg || '';
+    }
+    function validateForm() {
+      let valid = true;
+      // Ảnh
+      if(!validateImgFiles()) valid = false;
+      // Tình trạng
+      const condition = document.getElementById('condition');
+      if(!condition.value) { showError('condition','Vui lòng chọn tình trạng'); valid = false; }
+      else showError('condition','');
+      // Hãng
+      const brand = document.getElementById('brand');
+      if(!brand.value) { showError('brand','Vui lòng chọn hãng'); valid = false; }
+      else showError('brand','');
+      // Giá
+      const price = document.getElementById('price');
+      if(!price.value.trim()) { showError('price','Vui lòng nhập giá bán hoặc ghi "Miễn phí"'); valid = false; }
+      else showError('price','');
+      return valid;
+    }
+    document.getElementById('postForm').onsubmit = e=>{
+      e.preventDefault();
+      if(validateForm()) {
+        alert('🎉 Đăng tin thành công! (Demo)\nThông tin sẽ được xử lý');
+        // submit thực tế ở đây
+      }
+    };
+    // Realtime validation
+    ['condition','brand','price'].forEach(id=>{
+      document.getElementById(id).addEventListener('input',()=>validateForm());
+    });
+
+  </script>
+</body>
+</html>
