@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ReBuy - Thông tin cá nhân</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <!-- AOS Animate On Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <style>
+    html,body { font-family: 'Inter', sans-serif; background: #f2f6fa; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 65% 100% at 60% 8%, #e0f2fe 40%, #f8fafc 100%);
+      position: relative;
+    }
+    .glass {
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 4px 24px 0 rgba(17, 56, 90, 0.09), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1.2px solid rgba(202,228,248, 0.14);
+    }
+    .neumorph {
+      background: #f4f8fb;
+      box-shadow: 2px 2px 18px #e8eef3, -2px -2px 18px #ffffff;
+      border-radius: 1.5rem;
+    }
+    .noise {
+      pointer-events:none;
+      opacity: 0.09;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      mix-blend-mode: overlay;
+    }
+    .float-shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.10;
+      animation: float 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .float-shape1 { width: 120px; height: 120px; background: #38bdf8; left: 5vw; top: 10vh; animation-delay: 0s;}
+    .float-shape2 { width: 90px; height: 90px; background: #fbbf24; right: 9vw; top: 23vh; animation-delay: 2s;}
+    .float-shape3 { width: 85px; height: 85px; background: #34d399; left: 30vw; bottom: 8vh; animation-delay: 4s;}
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-25px) scale(1.09);}
+    }
+    ::-webkit-scrollbar { height: 6px; width: 6px; background: transparent;}
+    ::-webkit-scrollbar-thumb { background: #d1d8e2; border-radius: 3px;}
+    .gradient-title {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 60%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+    .header-shadow {
+      box-shadow: 0 2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .footer-shadow {
+      box-shadow: 0 -2px 20px 0 rgba(56,189,248,0.07), 0 0.5px 2px 0 rgba(80,120,200,0.05);
+    }
+    .sidebar-link.active {
+      background: linear-gradient(90deg, #e0f2fe 50%, #f8fafc 100%);
+      color: #0ea5e9 !important;
+      font-weight: 700;
+    }
+    .sidebar-link {
+      transition: all .18s;
+    }
+    .sidebar-link:hover {
+      background: #e0f2fe;
+      color: #0ea5e9;
+    }
+    .input-glass {
+      background: rgba(245,250,255,0.77);
+      border: 1.5px solid #e0f2fe;
+      border-radius: 1rem;
+      font-size: 1rem;
+      color: #222;
+      outline: none;
+      transition: border .15s, box-shadow .15s;
+      box-shadow: 0 1.5px 6px 0 rgba(56,189,248,0.07);
+      padding: 0.9rem 1.2rem;
+    }
+    .input-glass:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 3px 16px 0 rgba(56,189,248,0.12);
+      background: #fff;
+    }
+    .input-label {
+      font-weight: 600;
+      color: #0ea5e9;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+    .input-desc {
+      font-size: 0.89rem;
+      color: #888;
+      margin-bottom: 0.7rem;
+      margin-top: -0.1rem;
+    }
+    .btn-main {
+      background: linear-gradient(90deg, #38bdf8 0%, #6366f1 80%);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 1rem;
+      padding: 0.9rem 2rem;
+      box-shadow: 0 2px 12px 0 rgba(56,189,248,0.08);
+      transition: all 0.15s;
+    }
+    .btn-main:hover {
+      background: linear-gradient(90deg, #6366f1 0%, #38bdf8 100%);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 4px 18px 0 rgba(56,189,248,0.13);
+    }
+    .form-section {
+      background: rgba(255,255,255,0.98);
+      border-radius: 1.2rem;
+      box-shadow: 0 3px 27px 0 rgba(17, 56, 90, 0.10), 0 1.5px 7px 0 rgba(80,120,200,0.05);
+      border: 1.2px solid rgba(202,228,248, 0.13);
+    }
+    .status-label {
+      background: #e0f2fe;
+      color: #38bdf8;
+      font-weight: 600;
+      padding: 0.1rem 0.7rem;
+      border-radius: 0.7rem;
+      font-size: 0.91rem;
+      margin-left: 0.6rem;
+    }
+    .qr-img { border-radius: 0.8rem; box-shadow: 0 2px 10px 0 rgba(56,189,248,0.08);}
+    @media (max-width: 900px) {
+      .glass { border-radius: 1.1rem;}
+      .neumorph { border-radius: 1.1rem;}
+    }
+    @media (max-width: 768px) {
+      .main-grid { grid-template-columns: 1fr !important; }
+      .sidebar-section { margin-bottom: 2rem;}
+      .form-section { padding: 2rem 1.2rem !important;}
+    }
+    @media (max-width: 600px) {
+      .form-section { padding: 1.3rem 0.4rem !important;}
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-[#f2f6fa]">
+  <!-- Animated BG shapes & noise -->
+  <div class="float-shape float-shape1"></div>
+  <div class="float-shape float-shape2"></div>
+  <div class="float-shape float-shape3"></div>
+  <div class="noise"></div>
+
+  <!-- Header -->
+  <header class="w-full sticky top-0 z-50 bg-white/90 header-shadow backdrop-blur-[6px] border-b border-sky-50" data-aos="fade-down">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-8 py-2 lg:py-3">
+      <div class="flex items-center gap-3 min-w-[110px]">
+        <span class="gradient-title font-extrabold text-2xl tracking-tight select-none">ReBuy</span>
+        <span class="ml-2 bg-sky-100 text-sky-700 font-semibold px-2 py-1 rounded-lg text-xs">Beta</span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-4 min-w-[200px] justify-end">
+        <button class="glass px-5 py-2 rounded-lg font-semibold text-sky-700 hover:bg-sky-50 transition border border-sky-100 flex items-center gap-2 text-base">
+          <i class="ph ph-user text-xl"></i>
+          Đăng nhập
+        </button>
+        <button class="btn-main px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition flex items-center gap-2 text-base">
+          <i class="ph ph-plus-circle text-xl"></i>
+          Đăng tin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="max-w-7xl mx-auto mt-10 px-2 sm:px-6 mb-12">
+    <nav class="text-sm text-gray-500 mb-6 flex gap-2 items-center">
+      <a href="#" class="hover:text-sky-600 transition">Trang chủ</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-400">Thông tin cá nhân</span>
+    </nav>
+    <div class="grid main-grid grid-cols-6 gap-7">
+      <!-- Sidebar -->
+      <aside class="col-span-1 sidebar-section">
+        <ul class="flex flex-col gap-1 glass p-0.5 py-2 rounded-2xl shadow-md">
+          <li>
+            <a href="#" class="sidebar-link flex items-center gap-2 px-4 py-3 rounded-xl active">
+              <i class="ph ph-user text-lg"></i>
+              Thông tin cá nhân
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link flex items-center gap-2 px-4 py-3 rounded-xl">
+              <i class="ph ph-link text-lg"></i>
+              Liên kết mạng xã hội
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link flex items-center gap-2 px-4 py-3 rounded-xl">
+              <i class="ph ph-gear text-lg"></i>
+              Cài đặt tài khoản
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link flex items-center gap-2 px-4 py-3 rounded-xl">
+              <i class="ph ph-clock text-lg"></i>
+              Lịch sử đăng tin
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- Form -->
+      <section class="col-span-5 form-section px-10 py-9 shadow-xl glass" data-aos="zoom-in">
+        <h1 class="text-2xl font-extrabold gradient-title mb-6">Thông tin cá nhân</h1>
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5" autocomplete="off">
+          <!-- Hồ sơ cá nhân -->
+          <div class="col-span-2">
+            <h2 class="text-lg text-sky-600 font-bold mb-2">Hồ sơ cá nhân</h2>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="fullname">Họ và tên</label>
+            <input class="input-glass" type="text" id="fullname" name="fullname" placeholder="Nhập họ tên" value="Bảo Tin" required />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="phone">Số điện thoại</label>
+            <input class="input-glass" type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" value="0932532743" required />
+          </div>
+          <div class="flex flex-col gap-2 md:col-span-2">
+            <label class="input-label" for="address">Địa chỉ</label>
+            <input class="input-glass" type="text" id="address" name="address" placeholder="Nhập địa chỉ nơi ở hoặc giao dịch" />
+          </div>
+          <div class="flex flex-col gap-2 md:col-span-2">
+            <label class="input-label" for="desc">Giới thiệu</label>
+            <textarea class="input-glass h-24 resize-y" id="desc" name="desc" placeholder="Viết vài dòng giới thiệu về gian hàng của bạn..."></textarea>
+          </div>
+          <div class="flex flex-col gap-2 md:col-span-2">
+            <label class="input-label" for="nickname">Tên gợi nhớ <span class="input-desc">(Tùy chọn, dùng làm địa chỉ cá nhân rút gọn)</span></label>
+            <input class="input-glass" type="text" id="nickname" name="nickname" placeholder="Nhập tên gợi nhớ (VD: baotin123)" />
+          </div>
+
+          <!-- Thông tin bảo mật -->
+          <div class="col-span-2 mt-3">
+            <h2 class="text-lg text-sky-600 font-bold mb-2">Thông tin bảo mật</h2>
+          </div>
+          <div class="flex flex-col gap-2 md:col-span-2">
+            <label class="input-label" for="email">Email</label>
+            <div class="flex items-center gap-2">
+              <input class="input-glass flex-1" type="email" id="email" name="email" value="kelnguyen00@gmail.com" disabled />
+              <button type="button" class="glass border border-sky-200 text-sky-700 font-semibold px-4 py-2 rounded-lg hover:bg-sky-50 transition whitespace-nowrap">Thay đổi</button>
+            </div>
+            <span class="input-desc">Thực xác minh đã được gửi đến <b>kelnguyen00@gmail.com</b>. Chọn "XÁC THỰC" trên đường link trong Email để xác nhận liên kết.</span>
+            <a href="#" class="text-xs text-sky-500 hover:underline">Gửi lại thư xác thực</a>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="cccd">CCCD / CMND / Hộ chiếu</label>
+            <input class="input-glass" type="text" id="cccd" name="cccd" placeholder="Nhập số giấy tờ tùy thân" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="invoice">Thông tin xuất hoá đơn</label>
+            <input class="input-glass" type="text" id="invoice" name="invoice" placeholder="Nhập thông tin xuất hoá đơn (nếu có)" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="tax">Mã số thuế</label>
+            <input class="input-glass" type="text" id="tax" name="tax" placeholder="Nhập mã số thuế" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="fav">Danh mục yêu thích</label>
+            <input class="input-glass" type="text" id="fav" name="fav" placeholder="(Ví dụ: Điện thoại, Xe máy, Nội thất...)" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="gender">Giới tính</label>
+            <select class="input-glass" id="gender" name="gender">
+              <option value="">Chọn giới tính</option>
+              <option>Nam</option>
+              <option>Nữ</option>
+              <option>Khác</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="input-label" for="birthday">Ngày, tháng, năm sinh</label>
+            <input class="input-glass" type="date" id="birthday" name="birthday" />
+          </div>
+          <div class="col-span-2 flex justify-end mt-6">
+            <button class="btn-main text-lg flex gap-2 items-center" type="submit">
+              <i class="ph ph-floppy-disk text-xl"></i>
+              Lưu thay đổi
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full footer-shadow bg-white/95 mt-16 border-t border-sky-50">
+    <div class="max-w-7xl mx-auto px-4 md:px-10 py-10 rounded-none md:rounded-3xl grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <span class="gradient-title font-extrabold text-2xl tracking-tight">ReBuy</span>
+        <p class="mt-3 text-sm font-medium text-gray-400">
+          Nền tảng mua bán đồ cũ chất lượng cao cho sinh viên, dân văn phòng, người thuê trọ.
+        </p>
+        <div class="flex space-x-3 mt-4">
+          <a href="#" class="social-round" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Messenger"><i class="ph ph-messenger-logo"></i></a>
+          <a href="#" class="social-round" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Danh mục</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Xe cộ</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điện thoại</a></li>
+          <li><a href="#" class="hover:text-sky-500">Đồ điện tử</a></li>
+          <li><a href="#" class="hover:text-sky-500">Nội thất</a></li>
+          <li><a href="#" class="hover:text-sky-500">Thời trang</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Hỗ trợ khách hàng</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Trung tâm trợ giúp</a></li>
+          <li><a href="#" class="hover:text-sky-500">An toàn & bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Liên hệ hỗ trợ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-3">Về ReBuy</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-sky-500">Giới thiệu</a></li>
+          <li><a href="#" class="hover:text-sky-500">Chính sách bảo mật</a></li>
+          <li><a href="#" class="hover:text-sky-500">Điều khoản sử dụng</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
+      © 2024 ReBuy. Made for the community. | Liên hệ: support@rebuy.vn
+    </div>
+  </footer>
+  <script>
+    // Animate On Scroll
+    AOS.init({ duration: 900, once: true });
+  </script>
+</body>
+</html>
