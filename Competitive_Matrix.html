@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Trận Cạnh Tranh - LoopCutAI</title>
+<style>
+/* ----------  DESIGN TOKENS  ---------- */
+:root{
+  --loopcut:#1DB954;
+  --direct-legacy:#FFCDD2;
+  --direct-emerging:#C5CAE9;
+  --indirect-legacy:#FFF9C4;
+  --indirect-emerging:#B2DFDB;
+  --bg:#f9f9f9;
+  --text:#111;
+  --axis:#222;
+  --axis-bg:#ffffffb3;
+  --shadow:0 6px 18px rgba(0,0,0,.08);
+  --glow:0 0 0 4px rgba(29,185,84,.25);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#121212;
+    --text:#eee;
+    --axis:#fff;
+    --axis-bg:#000000b3;
+    --shadow:0 6px 18px rgba(0,0,0,.35);
+    --glow:0 0 0 4px rgba(29,185,84,.45);
+  }
+}
+/* ----------  LAYOUT  ---------- */
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:var(--text);
+}
+.matrix-wrapper{
+  position:relative;
+  width:90vw;
+  max-width:900px;
+  aspect-ratio:4/3;
+}
+.matrix-container{
+  position:relative;
+  width:100%;height:100%;
+  background:conic-gradient(from 90deg at 50% 50%,
+            var(--direct-legacy) 0 90deg,
+            var(--direct-emerging) 90deg 180deg,
+            var(--indirect-emerging) 180deg 270deg,
+            var(--indirect-legacy) 270deg 360deg);
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+/* ----------  AXIS  ---------- */
+.axis{
+  position:absolute;
+  background:var(--axis);
+  opacity:.45;
+}
+.axis-h{top:50%;left:0;width:100%;height:1px;transform:translateY(-50%);}
+.axis-v{left:50%;top:0;height:100%;width:1px;transform:translateX(-50%);}
+/* ----------  AXIS LABELS  ---------- */
+.axis-label{
+  position:absolute;
+  font-size:clamp(12px,1.3vw,15px);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:var(--axis);
+  background:var(--axis-bg);
+  padding:4px 10px;
+  border-radius:9999px;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.25);
+}
+.label-direct{top:10px;left:50%;transform:translateX(-50%);}
+.label-indirect{bottom:10px;left:50%;transform:translateX(-50%);}
+.label-legacy{left:10px;top:50%;transform:translateY(-50%) rotate(-90deg);}
+.label-emerging{right:10px;top:50%;transform:translateY(-50%) rotate(90deg);}
+/* ----------  BUBBLES  ---------- */
+.competitor{
+  position:absolute;
+  padding:clamp(6px,1vw,10px) clamp(10px,1.6vw,16px);
+  border-radius:9999px;
+  font-size:clamp(11px,1.3vw,14px);
+  font-weight:600;
+  white-space:nowrap;
+  cursor:pointer;
+  transform:translate(-50%,-50%) scale(.95);
+  opacity:0;
+  animation:pop .6s ease forwards;
+  box-shadow:var(--shadow);
+  transition:transform .2s ease;
+  color:#000;
+  border:1.5px solid rgba(0,0,0,.25);
+}
+.competitor:nth-child(1){animation-delay:.05s;}
+.competitor:nth-child(2){animation-delay:.1s;}
+.competitor:nth-child(3){animation-delay:.15s;}
+.competitor:nth-child(4){animation-delay:.2s;}
+.competitor:nth-child(5){animation-delay:.25s;}
+.competitor:nth-child(6){animation-delay:.3s;}
+.competitor:nth-child(7){animation-delay:.35s;}
+.competitor:nth-child(8){animation-delay:.4s;}
+.competitor:nth-child(9){animation-delay:.45s;}
+.competitor:nth-child(10){animation-delay:.5s;}
+@keyframes pop{
+  to{transform:translate(-50%,-50%) scale(1);opacity:1;}
+}
+.competitor:hover{transform:translate(-50%,-50%) scale(1.08);z-index:10;}
+/* ----------  TOOLTIP  ---------- */
+.tooltip{
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#000d;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:11px;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .2s;
+}
+.competitor:hover .tooltip{opacity:1;}
+/* ----------  LOOPCUT AI  ---------- */
+#loopcutai{
+  background:var(--loopcut);
+  color:#fff;
+  font-weight:700;
+  box-shadow:var(--glow),var(--shadow);
+  border:none;
+}
+#loopcutai::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:9999px;
+  border:2px solid var(--loopcut);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(.85);opacity:.8;}
+  70%{transform:scale(1.4);opacity:0;}
+  100%{transform:scale(.85);opacity:0;}
+}
+</style>
+</head>
+<body>
+<div class="matrix-wrapper">
+  <div class="matrix-container">
+    <div class="axis axis-h"></div>
+    <div class="axis axis-v"></div>
+
+    <span class="axis-label label-direct">Direct</span>
+    <span class="axis-label label-indirect">Indirect</span>
+    <span class="axis-label label-legacy">Legacy</span>
+    <span class="axis-label label-emerging">Emerging</span>
+
+    <!-- Your startup -->
+    <div class="competitor" id="loopcutai" style="top:50%;left:50%;">
+      LoopCutAI
+      <span class="tooltip">AI-powered subscription cancellation + spend analytics</span>
+    </div>
+
+    <!-- Direct & Legacy -->
+    <div class="competitor" style="top:15%;left:20%;background:var(--direct-legacy);">
+      Rocket Money<span class="tooltip">Threat 85</span>
+    </div>
+    <div class="competitor" style="top:30%;left:30%;background:var(--direct-legacy);">
+      Trim<span class="tooltip">Threat 70</span>
+    </div>
+    <div class="competitor" style="top:20%;left:40%;background:var(--direct-legacy);">
+      Simplifi<span class="tooltip">Threat 60</span>
+    </div>
+
+    <!-- Direct & Emerging -->
+    <div class="competitor" style="top:18%;left:75%;background:var(--direct-emerging);">
+      Copilot Money<span class="tooltip">Threat 78</span>
+    </div>
+    <div class="competitor" style="top:35%;left:65%;background:var(--direct-emerging);">
+      Bobby<span class="tooltip">Threat 55</span>
+    </div>
+    <div class="competitor" style="top:38%;left:85%;background:var(--direct-emerging);">
+      Subby<span class="tooltip">Threat 50</span>
+    </div>
+
+    <!-- Indirect & Legacy -->
+    <div class="competitor" style="top:80%;left:15%;background:var(--indirect-legacy);">
+      YNAB<span class="tooltip">Threat 65</span>
+    </div>
+    <div class="competitor" style="top:65%;left:35%;background:var(--indirect-legacy);">
+      PocketGuard<span class="tooltip">Threat 45</span>
+    </div>
+
+    <!-- Indirect & Emerging -->
+    <div class="competitor" style="top:75%;left:80%;background:var(--indirect-emerging);">
+      Monarch Money<span class="tooltip">Threat 40</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
